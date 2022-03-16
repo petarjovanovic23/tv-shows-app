@@ -36,11 +36,14 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                   return Colors.white;
                 }),
               ),
-              onPressed: () =>
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WelcomeScreen('userEmail'))),
-              // onPressed: widget.isActiveButton ? () {} : null,
-              child:
-                  Text(widget.buttonText, style: TextStyle(color: widget.isActiveButton ? Colors.black : Colors.white)),
+              // onPressed: () =>,
+              onPressed: widget.isActiveButton
+                  ? () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WelcomeScreen('userEmail')));
+                    }
+                  : null,
+              child: Text(widget.buttonText,
+                  style: TextStyle(color: widget.isActiveButton ? const Color(0xff52368C) : Colors.white)),
             ),
           ),
         ),

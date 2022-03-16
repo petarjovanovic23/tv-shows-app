@@ -15,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: const Color(0xff52368C),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
             height: MediaQuery.of(context).size.height * 0.33,
@@ -31,7 +31,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-          LoginFormWidget(),
+          const SizedBox(height: 80),
+          const Expanded(child: LoginFormWidget()),
+          // SizedBox.shrink(),
         ],
       ),
     );
