@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-
-import '../screens/welcome_screen.dart';
+import 'package:tv_shows/screens/welcome_screen.dart';
 
 class ButtonWidget extends StatefulWidget {
   final String buttonText;
   bool isActiveButton;
-  ButtonWidget(this.buttonText, this.isActiveButton, {Key? key}) : super(key: key);
+  final String userEmail;
+
+  ButtonWidget(this.buttonText, this.isActiveButton, this.userEmail);
 
   @override
   State<ButtonWidget> createState() => _ButtonWidgetState();
 }
 
 class _ButtonWidgetState extends State<ButtonWidget> {
-  // bool isActive = false;
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -36,10 +35,9 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                   return Colors.white;
                 }),
               ),
-              // onPressed: () =>,
               onPressed: widget.isActiveButton
                   ? () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WelcomeScreen('userEmail')));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => WelcomeScreen(widget.userEmail)));
                     }
                   : null,
               child: Text(widget.buttonText,
