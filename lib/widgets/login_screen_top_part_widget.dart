@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class LoginTopPartWidget extends StatelessWidget {
-  const LoginTopPartWidget({Key? key}) : super(key: key);
+class LoginScreenTopPartWidget extends StatelessWidget {
+  const LoginScreenTopPartWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

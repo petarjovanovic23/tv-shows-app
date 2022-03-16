@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/login_form_widget.dart';
-import '../widgets/login_top_part_widget.dart';
+import '../widgets/login_screen_top_part_widget.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
       backgroundColor: const Color(0xff52368C),
       body: Column(
         children: const [
-          LoginTopPartWidget(),
+          LoginScreenTopPartWidget(),
           SizedBox(height: 80),
           LoginFormWidget(),
         ],
