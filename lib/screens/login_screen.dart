@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../widgets/button_widget.dart';
-import '../widgets/input_field_widget.dart';
+import 'package:tv_shows/widgets/login_form_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -12,10 +10,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  bool isActiveButton = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,22 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Login', style: TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 12),
-                const Text('In order to continue please log in.', style: TextStyle(color: Colors.white, fontSize: 14)),
-                const SizedBox(height: 12),
-                InputFieldWidget(label: 'Email', controller: emailController, isPassword: false),
-                const SizedBox(height: 18),
-                InputFieldWidget(label: 'Password', controller: passwordController, isPassword: true),
-              ],
-            ),
-          ),
-          ButtonWidget('Login', isActiveButton),
+          LoginFormWidget(),
         ],
       ),
     );
