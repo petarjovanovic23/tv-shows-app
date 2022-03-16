@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 class InputFieldWidget extends StatefulWidget {
   final String label;
   final bool isPassword;
-  const InputFieldWidget(this.label, this.isPassword);
+  final TextEditingController controller;
+  InputFieldWidget({
+    required this.label,
+    required this.isPassword,
+    required this.controller,
+  });
 
   @override
   State<InputFieldWidget> createState() => _InputFieldWidgetState();
@@ -15,6 +20,7 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: widget.controller,
       obscureText: widget.isPassword
           ? _clicked
               ? false
