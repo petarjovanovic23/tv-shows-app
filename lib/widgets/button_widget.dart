@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../screens/welcome_screen.dart';
+
 class ButtonWidget extends StatefulWidget {
   final String buttonText;
   bool isActiveButton;
@@ -34,7 +36,9 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                   return Colors.white;
                 }),
               ),
-              onPressed: widget.isActiveButton ? () {} : null,
+              onPressed: () =>
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WelcomeScreen('userEmail'))),
+              // onPressed: widget.isActiveButton ? () {} : null,
               child:
                   Text(widget.buttonText, style: TextStyle(color: widget.isActiveButton ? Colors.black : Colors.white)),
             ),
