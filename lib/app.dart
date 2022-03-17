@@ -8,8 +8,11 @@ class TvShowsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData.light().copyWith(
+        primaryColor: const Color(0xff52368C),
+      ),
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: const LoginScreen(),
     );
   }
 }

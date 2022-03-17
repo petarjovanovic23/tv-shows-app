@@ -41,7 +41,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                     }
                   : null,
               child: Text(widget.buttonText,
-                  style: TextStyle(color: widget.isActiveButton ? const Color(0xff52368C) : Colors.white)),
+                  style: TextStyle(color: widget.isActiveButton ? Theme.of(context).primaryColor : Colors.white)),
             ),
           ),
         ),
