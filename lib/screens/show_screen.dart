@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/classes/show.dart';
-import 'package:tv_shows/gen/assets.gen.dart';
 import 'package:tv_shows/gen/fonts.gen.dart';
+import 'package:tv_shows/widgets/hidden_shows_widget.dart';
+import 'package:tv_shows/widgets/shows_list_widget.dart';
 
 class ShowScreen extends StatefulWidget {
   const ShowScreen({Key? key}) : super(key: key);
@@ -17,8 +17,15 @@ class _ShowScreenState extends State<ShowScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ShowsProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ShowsProvider>(
+          create: (_) => ShowsProvider(),
+        ),
+        ChangeNotifierProvider<ShowsScreenContentProvider>(
+          create: (_) => ShowsScreenContentProvider(),
+        ),
+      ],
       child: Scaffold(
         body: LayoutBuilder(
           builder: (context, constraints) {
@@ -53,72 +60,23 @@ class _ShowScreenState extends State<ShowScreen> {
                     ],
                   ),
                 ),
-                _isHidden
-                    ? Center(
-                        child: Container(
-                        height: constraints.maxHeight * 0.72,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(Assets.images.icShowsEmptyState),
-                            const SizedBox(height: 20),
-                            const Text('Your shows are not showing. Get it?', style: TextStyle(color: Colors.black))
-                          ],
-                        ),
-                      ))
-                    : SingleChildScrollView(
-                        child: SizedBox(
-                          height: constraints.maxHeight * 0.8,
-                          child: ListView.builder(
-                            itemCount: Provider.of<ShowsProvider>(context).getAllShows().length,
-                            itemBuilder: (context, index) {
-                              return SizedBox(
-                                height: 302,
-                                child: Card(
-                                  margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8.0),
-                                  elevation: 2,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Image.asset(
-                                        Provider.of<ShowsProvider>(context).getAllShows()[index].imageUrl,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-                                        child: Text(
-                                          Provider.of<ShowsProvider>(context).getAllShows()[index].name,
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            fontFamily: FontFamily.roboto,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                        child: Text(
-                                          Provider.of<ShowsProvider>(context).getAllShows()[index].description,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            color: Color(0xffaaaaaa),
-                                            fontFamily: FontFamily.roboto,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
+                _isHidden ? HiddenShowsWidget(constraints) : ShowsListWidget(constraints),
               ],
             );
           },
         ),
       ),
     );
+  }
+}
+
+class ShowsScreenContentProvider extends ChangeNotifier {
+  bool _isHidden = false;
+
+  bool get isHidden => _isHidden;
+
+  void switchContent() {
+    _isHidden = !_isHidden;
+    notifyListeners();
   }
 }

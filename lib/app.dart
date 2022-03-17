@@ -18,6 +18,16 @@ class TvShowsApp extends StatelessWidget {
             fontSize: 36,
             color: Colors.black,
           ),
+          headline2: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontFamily: FontFamily.roboto,
+          ),
+          bodyText1: TextStyle(
+            color: Color(0xffaaaaaa),
+            fontSize: 14,
+            fontFamily: FontFamily.roboto,
+          ),
         ),
       ),
       debugShowCheckedModeBanner: false,
