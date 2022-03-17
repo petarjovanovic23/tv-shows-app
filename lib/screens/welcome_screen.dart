@@ -17,7 +17,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     // TODO: implement initState
     super.initState();
     Future.delayed(const Duration(seconds: 1),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ShowScreen())));
+        () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ShowScreen())));
   }
 
   @override
@@ -29,7 +29,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           children: [
             SvgPicture.asset(Assets.images.welcomeIcon),
             const SizedBox(height: 24),
-            Text('Welcome, ${widget.email}!', style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text('Welcome, ${widget.email}!', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
           ],
         ),
       ),

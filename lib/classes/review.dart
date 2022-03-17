@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class Review {
   String comment;
   int rating;
@@ -43,4 +45,10 @@ class Review {
       imageUrl: 'assets/images/ic_profile_placeholder.svg',
     ),
   ];
+}
+
+class ReviewProvider extends ChangeNotifier {
+  List<Review> getAllReviews() {
+    return Review.allReviews;
+  }
 }

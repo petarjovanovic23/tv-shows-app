@@ -22,8 +22,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/Welcome_icon.svg
   String get welcomeIcon => 'assets/images/Welcome_icon.svg';
 
-  /// File path: assets/images/ic_office.svg
-  String get icOffice => 'assets/images/ic_office.svg';
+  /// File path: assets/images/ic_office.png
+  AssetGenImage get icOffice =>
+      const AssetGenImage('assets/images/ic_office.png');
 
   /// File path: assets/images/ic_profile_placeholder.svg
   String get icProfilePlaceholder => 'assets/images/ic_profile_placeholder.svg';
@@ -31,11 +32,13 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_shows_empty_state.svg
   String get icShowsEmptyState => 'assets/images/ic_shows_empty_state.svg';
 
-  /// File path: assets/images/krv_nije_voda.svg
-  String get krvNijeVoda => 'assets/images/krv_nije_voda.svg';
+  /// File path: assets/images/ic_stranger_things.png
+  AssetGenImage get icStrangerThings =>
+      const AssetGenImage('assets/images/ic_stranger_things.png');
 
-  /// File path: assets/images/stranger-things-poster.svg
-  String get strangerThingsPoster => 'assets/images/stranger-things-poster.svg';
+  /// File path: assets/images/krv_nije_voda.png
+  AssetGenImage get krvNijeVoda =>
+      const AssetGenImage('assets/images/krv_nije_voda.png');
 }
 
 class Assets {

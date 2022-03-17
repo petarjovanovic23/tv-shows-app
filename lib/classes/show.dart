@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tv_shows/gen/assets.gen.dart';
 
 class Show {
   String name;
@@ -18,26 +19,31 @@ class Show {
   static final allShows = [
     Show(
       name: 'The Office',
-      description: 'Ricky Gervais\' prime comedy',
+      description:
+          'Ricky Gervais\' prime comedy lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
       numOfReviews: 10,
       averageRating: 4.5,
-      imageUrl: 'assets/images/ic_office.svg',
+      imageUrl: Assets.images.icOffice.path,
     ),
     Show(
       name: 'Krv nije voda',
       description: 'Samo neka drama',
       numOfReviews: 452,
       averageRating: 3.5,
-      imageUrl: 'assets/images/krv_nije_voda.svg',
+      imageUrl: Assets.images.krvNijeVoda.path,
     ),
     Show(
       name: 'Stranger things',
       description: 'Televisa Netflix presenta',
       numOfReviews: 75,
       averageRating: 4.9,
-      imageUrl: 'assets/images/stranger-things-poster.svg',
+      imageUrl: Assets.images.icStrangerThings.path,
     ),
   ];
 }
 
-class ShowsProvider extends ChangeNotifier {}
+class ShowsProvider extends ChangeNotifier {
+  List<Show> getAllShows() {
+    return Show.allShows;
+  }
+}
