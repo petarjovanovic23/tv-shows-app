@@ -20,7 +20,7 @@ class Show {
     Show(
       name: 'The Office',
       description:
-          'Ricky Gervais\' prime comedy lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
+          'Ricky Gervais\' prime comedy lorem ipsum dolor sit amet, lorem ipsum dolor sit amet, lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temporcdconsectetur adipiscing elit, sed do eiusmod tempor consectetur adipiscing elit, sed do eiusmod tempor',
       numOfReviews: 10,
       averageRating: 4.5,
       imageUrl: Assets.images.icOffice.path,
@@ -42,7 +42,7 @@ class Show {
     Show(
       name: 'Show with zero reviews',
       description:
-          'The Office is an American mockumentary sitcom television series that depicts the everyday work lives of office employees in the Scranton, Pennsylvania, branch of the fictional Dunder Mifflin Paper Company. It aired on NBC from March 24, 2005, to May 16, 2013, lasting a total of nine seasons.',
+          'The Office is an American mockumentary sitcom television  series that depicts the everyday work lives of office employees in the Scranton, Pennsylvania, branch of the fictional Dunder Mifflin Paper Company. It aired on NBC from March 24, 2005, to May 16, 2013, lasting a total of nine seasons.',
       numOfReviews: 0,
       averageRating: 0,
       imageUrl: Assets.images.icStrangerThings.path,

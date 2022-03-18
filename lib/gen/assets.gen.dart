@@ -26,8 +26,13 @@ class $AssetsImagesGen {
   AssetGenImage get icOffice =>
       const AssetGenImage('assets/images/ic_office.png');
 
+  /// File path: assets/images/ic_profile_placeholder.png
+  AssetGenImage get icProfilePlaceholderPng =>
+      const AssetGenImage('assets/images/ic_profile_placeholder.png');
+
   /// File path: assets/images/ic_profile_placeholder.svg
-  String get icProfilePlaceholder => 'assets/images/ic_profile_placeholder.svg';
+  String get icProfilePlaceholderSvg =>
+      'assets/images/ic_profile_placeholder.svg';
 
   /// File path: assets/images/ic_shows_empty_state.svg
   String get icShowsEmptyState => 'assets/images/ic_shows_empty_state.svg';
