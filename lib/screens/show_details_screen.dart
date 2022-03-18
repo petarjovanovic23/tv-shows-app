@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/classes/review.dart' show ReviewProvider;
 import 'package:tv_shows/widgets/buttons/write_review_button.dart';
+import 'package:tv_shows/widgets/show_details_widget.dart';
 
 import '../classes/show.dart' show Show;
 
@@ -23,35 +24,11 @@ class ShowDetailsScreen extends StatelessWidget {
         ),
         backgroundColor: theme.backgroundColor,
         body: LayoutBuilder(builder: (context, constraints) {
-          return Padding(
+          return Container(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(show.name, style: theme.textTheme.headline1),
-                      const SizedBox(height: 16.0),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(16.0),
-                        child: Image.asset(
-                          show.imageUrl,
-                          fit: BoxFit.cover,
-                          height: 322,
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      Text(show.description, style: theme.textTheme.bodyText2),
-                      const SizedBox(height: 16.0),
-                      Text('Reviews', style: theme.textTheme.headline3),
-                      Padding(
-                        padding: const EdgeInsets.all(24.0),
-                        child: Center(child: Text('No reviews yet.', style: Theme.of(context).textTheme.bodyText1)),
-                      ),
-                    ],
-                  ),
-                ),
+                ShowDetailsWidget(show),
                 const WriteReviewButton(),
               ],
             ),
