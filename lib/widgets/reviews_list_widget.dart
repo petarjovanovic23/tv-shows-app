@@ -12,10 +12,12 @@ class ReviewsListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Review> reviews = Provider.of<ReviewProvider>(context).getAllReviews();
+    ThemeData theme = Theme.of(context);
+
     return show.numOfReviews == 0
         ? Padding(
             padding: const EdgeInsets.all(24.0),
-            child: Center(child: Text('No reviews yet.', style: Theme.of(context).textTheme.bodyText1)),
+            child: Center(child: Text('No reviews yet.', style: theme.textTheme.bodyText1)),
           )
         : Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -24,7 +26,7 @@ class ReviewsListWidget extends StatelessWidget {
               children: [
                 Text(
                   '${show.numOfReviews} REVIEWS, ${show.averageRating} AVERAGE',
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: theme.textTheme.bodyText1,
                 ),
                 RatingBar.builder(
                   ignoreGestures: true,
@@ -37,33 +39,21 @@ class ReviewsListWidget extends StatelessWidget {
                   itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
                   itemBuilder: (context, _) => Icon(
                     Icons.star,
-                    color: Theme.of(context).primaryColor,
+                    color: theme.primaryColor,
                   ),
                   onRatingUpdate: (_) {},
                 ),
-                // SingleChildScrollView(
-                //   child:
-                Container(
-                  height: 200,
+                SizedBox(
+                  height: 400,
                   child: ListView.builder(
-                      itemCount: reviews.length,
-                      itemBuilder: (context, index) {
-                        return ReviewWidget(reviews[index]);
-                      }),
+                    itemCount: reviews.length,
+                    itemBuilder: (context, index) {
+                      return ReviewWidget(reviews[index]);
+                    },
+                  ),
                 ),
-                // ),
               ],
             ),
           );
   }
 }
-
-/**
- * ListView.builder(
-    itemCount: reviews.length,
-    itemBuilder: (context, index) {
-    return Text(
-    reviews[0].comment,
-    style: Theme.of(context).textTheme.bodyText2,
-    );
-    }),*/
