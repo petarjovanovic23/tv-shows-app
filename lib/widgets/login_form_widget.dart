@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tv_shows/widgets/input/password_input_field_widget.dart';
 
-import 'button_widget.dart';
+import 'buttons/button_widget.dart';
 import 'input/input_field_widget.dart';
 
 class LoginFormWidget extends StatefulWidget {

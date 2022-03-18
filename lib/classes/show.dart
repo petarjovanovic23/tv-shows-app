@@ -39,6 +39,14 @@ class Show {
       averageRating: 4.9,
       imageUrl: Assets.images.icStrangerThings.path,
     ),
+    Show(
+      name: 'Show with zero reviews',
+      description:
+          'The Office is an American mockumentary sitcom television series that depicts the everyday work lives of office employees in the Scranton, Pennsylvania, branch of the fictional Dunder Mifflin Paper Company. It aired on NBC from March 24, 2005, to May 16, 2013, lasting a total of nine seasons.',
+      numOfReviews: 0,
+      averageRating: 0,
+      imageUrl: Assets.images.icStrangerThings.path,
+    ),
   ];
 }
 
