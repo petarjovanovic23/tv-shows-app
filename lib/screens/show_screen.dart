@@ -5,14 +5,9 @@ import 'package:tv_shows/widgets/hidden_shows_widget.dart';
 import 'package:tv_shows/widgets/show_screen_top_widget.dart';
 import 'package:tv_shows/widgets/shows_list_widget.dart';
 
-class ShowScreen extends StatefulWidget {
+class ShowScreen extends StatelessWidget {
   const ShowScreen({Key? key}) : super(key: key);
 
-  @override
-  State<ShowScreen> createState() => _ShowScreenState();
-}
-
-class _ShowScreenState extends State<ShowScreen> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
