@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tv_shows/classes/review.dart';
+import 'package:tv_shows/models/review.dart';
 
 class ReviewWidget extends StatelessWidget {
   final Review review;

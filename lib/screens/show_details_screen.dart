@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tv_shows/classes/review.dart' show ReviewProvider;
+import 'package:tv_shows/models/review.dart' show ReviewProvider;
 import 'package:tv_shows/widgets/buttons/write_review_button.dart';
 import 'package:tv_shows/widgets/show_details_widget.dart';
 
-import '../classes/show.dart' show Show;
+import '../models/show.dart' show Show;
 
 class ShowDetailsScreen extends StatelessWidget {
   final Show show;

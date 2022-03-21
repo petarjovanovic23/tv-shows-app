@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tv_shows/classes/review.dart';
+import 'package:tv_shows/models/review.dart';
 import 'package:tv_shows/widgets/reviews_list_widget.dart';
 
-import '../classes/show.dart' show Show;
+import '../models/show.dart' show Show;
 
 class ShowDetailsWidget extends StatelessWidget {
   final Show show;

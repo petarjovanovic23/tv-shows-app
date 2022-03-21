@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/screens/show_details_screen.dart';
 
-import '../classes/show.dart';
+import '../models/show.dart';
 
 class ShowCardWidget extends StatelessWidget {
   final BuildContext context;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../classes/show.dart' show ShowsProvider;
+import '../models/show.dart' show ShowsProvider;
 import 'show_card_widget.dart';
 
 class ShowsListWidget extends StatelessWidget {

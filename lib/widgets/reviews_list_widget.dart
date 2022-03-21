@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:tv_shows/classes/review.dart';
-import 'package:tv_shows/classes/show.dart';
+import 'package:tv_shows/models/review.dart';
+import 'package:tv_shows/models/show.dart';
 import 'package:tv_shows/widgets/review_widget.dart';
 
 class ReviewsListWidget extends StatelessWidget {
