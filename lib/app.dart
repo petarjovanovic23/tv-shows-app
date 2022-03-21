@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tv_shows/models/auth_info_holder.dart';
 
 import 'gen/fonts.gen.dart';
 import 'screens/login_screen.dart';
@@ -8,48 +10,53 @@ class TvShowsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.light().copyWith(
-        primaryColor: const Color(0xff52368C),
-        textTheme: const TextTheme(
-          headline1: TextStyle(
-            fontFamily: FontFamily.roboto,
-            fontWeight: FontWeight.bold,
-            fontSize: 36,
-            color: Colors.black,
+    return MultiProvider(
+      providers: [
+        Provider(create: (context) => AuthInfoHolder()),
+      ],
+      child: MaterialApp(
+        theme: ThemeData.light().copyWith(
+          primaryColor: const Color(0xff52368C),
+          textTheme: const TextTheme(
+            headline1: TextStyle(
+              fontFamily: FontFamily.roboto,
+              fontWeight: FontWeight.bold,
+              fontSize: 36,
+              color: Colors.black,
+            ),
+            headline2: TextStyle(
+              color: Colors.black87,
+              fontSize: 20,
+              fontFamily: FontFamily.roboto,
+            ),
+            headline3: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontSize: 24,
+              fontFamily: FontFamily.roboto,
+            ),
+            headline4: TextStyle(
+              fontFamily: FontFamily.roboto,
+              color: Color(0xff52368C),
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
+            bodyText1: TextStyle(
+              color: Color(0xffaaaaaa),
+              fontSize: 14,
+              fontFamily: FontFamily.roboto,
+            ),
+            bodyText2: TextStyle(
+              fontFamily: FontFamily.roboto,
+              color: Colors.black,
+              fontSize: 17,
+            ),
           ),
-          headline2: TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-            fontFamily: FontFamily.roboto,
-          ),
-          headline3: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            fontSize: 24,
-            fontFamily: FontFamily.roboto,
-          ),
-          headline4: TextStyle(
-            fontFamily: FontFamily.roboto,
-            color: Color(0xff52368C),
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
-          ),
-          bodyText1: TextStyle(
-            color: Color(0xffaaaaaa),
-            fontSize: 14,
-            fontFamily: FontFamily.roboto,
-          ),
-          bodyText2: TextStyle(
-            fontFamily: FontFamily.roboto,
-            color: Colors.black,
-            fontSize: 17,
-          ),
+          backgroundColor: Colors.white,
         ),
-        backgroundColor: Colors.white,
+        debugShowCheckedModeBanner: false,
+        home: const LoginScreen(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: const LoginScreen(),
     );
   }
 }
