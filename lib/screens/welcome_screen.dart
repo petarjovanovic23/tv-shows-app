@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:tv_shows/gen/assets.gen.dart';
+import 'package:tv_shows/screens/show_screen.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   final String email;
   const WelcomeScreen(this.email, {Key? key}) : super(key: key);
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(const Duration(seconds: 1),
+        () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ShowScreen())));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +27,9 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset('assets/images/Welcome_icon.svg'),
+            SvgPicture.asset(Assets.images.welcomeIcon),
             const SizedBox(height: 24),
-            Text('Welcome, $email!', style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text('Welcome, ${widget.email}!', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
           ],
         ),
       ),

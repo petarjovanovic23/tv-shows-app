@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tv_shows/screens/welcome_screen.dart';
 
-class ButtonWidget extends StatefulWidget {
+class ButtonWidget extends StatelessWidget {
   final String buttonText;
   bool isActiveButton;
   final String userEmail;
 
-  ButtonWidget(this.buttonText, this.isActiveButton, this.userEmail);
+  ButtonWidget(this.buttonText, this.isActiveButton, this.userEmail, {Key? key});
 
-  @override
-  State<ButtonWidget> createState() => _ButtonWidgetState();
-}
-
-class _ButtonWidgetState extends State<ButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -35,13 +30,11 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                   return Colors.white;
                 }),
               ),
-              onPressed: widget.isActiveButton
-                  ? () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => WelcomeScreen(widget.userEmail)));
-                    }
+              onPressed: isActiveButton
+                  ? () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => WelcomeScreen(userEmail)))
                   : null,
-              child: Text(widget.buttonText,
-                  style: TextStyle(color: widget.isActiveButton ? const Color(0xff52368C) : Colors.white)),
+              child: Text(buttonText,
+                  style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white)),
             ),
           ),
         ),

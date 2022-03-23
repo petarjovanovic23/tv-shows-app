@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tv_shows/widgets/input/password_input_field_widget.dart';
 
-import 'button_widget.dart';
-import 'input_field_widget.dart';
+import 'buttons/button_widget.dart';
+import 'input/input_field_widget.dart';
 
 class LoginFormWidget extends StatefulWidget {
   const LoginFormWidget({Key? key}) : super(key: key);
@@ -58,9 +59,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 const SizedBox(height: 12),
                 const Text('In order to continue please log in.', style: TextStyle(color: Colors.white, fontSize: 14)),
                 const SizedBox(height: 12),
-                InputFieldWidget(label: 'Email', controller: emailController, isPassword: false),
+                InputFieldWidget(label: 'Email', controller: emailController),
                 const SizedBox(height: 18),
-                InputFieldWidget(label: 'Password', controller: passwordController, isPassword: true),
+                PasswordInputFieldWidget(label: 'Password', controller: passwordController),
               ],
             ),
           ),

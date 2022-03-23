@@ -11,7 +11,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xff52368C),
+      backgroundColor: Theme.of(context).primaryColor,
       body: Column(
         children: const [
           LoginScreenTopPartWidget(),
