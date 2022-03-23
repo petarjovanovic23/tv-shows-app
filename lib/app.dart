@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/models/auth_info_holder.dart';
+import 'package:tv_shows/screens/auth/login_screen.dart';
 
 import 'gen/fonts.gen.dart';
-import 'screens/login_screen.dart';
 
 class TvShowsApp extends StatelessWidget {
   const TvShowsApp({Key? key}) : super(key: key);

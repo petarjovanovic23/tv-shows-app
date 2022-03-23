@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tv_shows/gen/assets.gen.dart';
 
-class LoginScreenTopPartWidget extends StatelessWidget {
-  const LoginScreenTopPartWidget({Key? key}) : super(key: key);
+class AuthScreenTopPartWidget extends StatelessWidget {
+  const AuthScreenTopPartWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

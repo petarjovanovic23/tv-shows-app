@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:tv_shows/widgets/input/password_input_field_widget.dart';
 
-import 'buttons/button_widget.dart';
-import 'input/input_field_widget.dart';
+import '../buttons/button_widget.dart';
+import 'input_field_widget.dart';
+import 'password_input_field_widget.dart';
 
-class LoginFormWidget extends StatefulWidget {
-  const LoginFormWidget({Key? key}) : super(key: key);
+class BaseFormWidget extends StatefulWidget {
+  const BaseFormWidget({
+    Key? key,
+    required this.title,
+    required this.description,
+    required this.buttonTitle,
+    required this.showOtherButtonTitle,
+    required this.buttonPressed,
+    required this.showOtherButtonPressed,
+  }) : super(key: key);
+
+  final String title, description, buttonTitle, showOtherButtonTitle;
+  final VoidCallback buttonPressed, showOtherButtonPressed;
 
   @override
-  State<LoginFormWidget> createState() => _LoginFormWidgetState();
+  State<BaseFormWidget> createState() => _BaseFormWidgetState();
 }
 
-class _LoginFormWidgetState extends State<LoginFormWidget> {
+class _BaseFormWidgetState extends State<BaseFormWidget> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   bool isActiveButton = false;
@@ -55,17 +66,32 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Login', style: TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
+                Text(widget.title,
+                    style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 12),
-                const Text('In order to continue please log in.', style: TextStyle(color: Colors.white, fontSize: 14)),
+                Text(widget.description, style: const TextStyle(color: Colors.white, fontSize: 14)),
                 const SizedBox(height: 12),
                 InputFieldWidget(label: 'Email', controller: emailController),
                 const SizedBox(height: 18),
                 PasswordInputFieldWidget(label: 'Password', controller: passwordController),
+                const SizedBox(height: 18),
+                Center(
+                  child: GestureDetector(
+                    onTap: widget.showOtherButtonPressed,
+                    child: Text(
+                      widget.showOtherButtonTitle,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
-          ButtonWidget('Login', isActiveButton, emailController.text),
+          ButtonWidget(widget.buttonTitle, isActiveButton, emailController.text, () {}),
         ],
       ),
     );

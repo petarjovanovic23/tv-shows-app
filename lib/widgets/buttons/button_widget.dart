@@ -5,11 +5,22 @@ class ButtonWidget extends StatelessWidget {
   final String buttonText;
   bool isActiveButton;
   final String userEmail;
+  final VoidCallback callback;
 
-  ButtonWidget(this.buttonText, this.isActiveButton, this.userEmail, {Key? key});
+  ButtonWidget(
+    this.buttonText,
+    this.isActiveButton,
+    this.userEmail,
+    this.callback, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    void test() {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => WelcomeScreen(userEmail)));
+    }
+
     return Row(
       children: [
         Expanded(
@@ -31,7 +42,8 @@ class ButtonWidget extends StatelessWidget {
                 }),
               ),
               onPressed: isActiveButton
-                  ? () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => WelcomeScreen(userEmail)))
+                  ? test
+                  //() => Navigator.of(context).push(MaterialPageRoute(builder: (_) => WelcomeScreen(userEmail)))
                   : null,
               child: Text(buttonText,
                   style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white)),
