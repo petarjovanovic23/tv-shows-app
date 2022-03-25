@@ -31,10 +31,10 @@ class Show {
 
 class ShowsProvider extends RequestProvider<List<Show>> {
   ShowsProvider(NetworkingRepository repository) {
-    _fetchShows(repository);
+    fetchShows(repository);
   }
 
-  void _fetchShows(NetworkingRepository repository) {
+  void fetchShows(NetworkingRepository repository) {
     executeRequest(requestBuilder: () => repository.fetchShows(this));
   }
 
