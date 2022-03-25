@@ -11,7 +11,7 @@ class ReviewsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Review> reviews = Provider.of<ReviewProvider>(context).getShowReviews(show);
+    List<Review> reviews = Provider.of<ReviewProvider>(context).getAllReviews();
     ThemeData theme = Theme.of(context);
 
     return show.no_of_reviews == 0

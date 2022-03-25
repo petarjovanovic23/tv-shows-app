@@ -41,8 +41,22 @@ class ButtonWidget extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
               ),
-          success: (user) => Text('Success'),
-          failure: (e) => Text('FAILURE', style: TextStyle(color: Colors.red)));
+          success: (user) {
+            if (!user.isEmpty()) {
+              return Text(
+                'Success',
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              );
+            }
+
+            // TODO: Implement error showDialog
+            return Text('Register',
+                style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white));
+          },
+          failure: (e) {
+            print(e.toString());
+            return Text('FAILURE REGISTER', style: TextStyle(color: Colors.red));
+          });
     }
 
     Widget loginButton() {
@@ -65,12 +79,15 @@ class ButtonWidget extends StatelessWidget {
             return Text('Success',
                 style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white));
           }
-          return Text('Something went wrong, try again',
-              style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white));
+          // TODO: Implement error showDialog
+
+          return Text('Login', style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white));
         },
-        failure: (e) => const Text(
-          'FAILURE LOGIN',
-          style: TextStyle(color: Colors.red),
+        failure: (e) => const AlertDialog(
+          title: Text(
+            'FAILURE LOGIN',
+            style: TextStyle(color: Colors.red),
+          ),
         ),
       );
     }

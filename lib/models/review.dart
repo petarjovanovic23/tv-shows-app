@@ -37,15 +37,15 @@ class ReviewProvider extends RequestProvider<List<Review>> {
     executeRequest(requestBuilder: () => repository.fetchReviews(show, this));
   }
 
-  List<Review> getShowReviews(Show show) {
-    return Review.allReviews.where((review) => review.show_id == int.parse(show.id as String)).toList();
-  }
-
   void addReview(Review review) {
     Review.allReviews.add(review);
   }
 
   List<Review> getAllReviews() {
     return Review.allReviews;
+  }
+
+  void clear() {
+    Review.allReviews = [];
   }
 }

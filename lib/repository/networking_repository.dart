@@ -23,7 +23,7 @@ class NetworkingRepository {
   late final Dio _dio;
   final AuthInfoHolder _authInfoHolder;
 
-  Future<User?> registerUser(RegisterInfo registerInfo) async {
+  Future<User> registerUser(RegisterInfo registerInfo) async {
     try {
       var response = await _dio.post(
         '/users',
@@ -38,7 +38,7 @@ class NetworkingRepository {
     } catch (e) {
       print('This is the error register message');
       print(e);
-      return null;
+      return User.empty();
     }
   }
 
@@ -49,10 +49,14 @@ class NetworkingRepository {
         data: loginInfo.toJson(),
       );
 
+      final info = AuthInfo.fromHeaderMap(response.headers.map);
+      _authInfoHolder.setInfo(info);
+
       print('This is the success login message');
       return User.fromJson(response.data['user']);
     } catch (e) {
       print('This is the error login message');
+
       print(e);
       return User.empty();
     }
@@ -78,6 +82,7 @@ class NetworkingRepository {
 
   Future<List<Review>> fetchReviews(Show show, ReviewProvider reviewProvider) async {
     try {
+      reviewProvider.clear();
       var response = await _dio.get('/shows/${show.id}/reviews');
       var listResponse = response.data['reviews'];
 
