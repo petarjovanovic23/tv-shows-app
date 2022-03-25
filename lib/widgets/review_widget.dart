@@ -17,8 +17,11 @@ class ReviewWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CircleAvatar(backgroundColor: Colors.transparent, child: Image.asset(review.imageUrl)),
-              Text(review.userEmail, style: theme.textTheme.headline4),
+              review.user?.image_url != null
+                  ? CircleAvatar(
+                      backgroundColor: Colors.transparent, child: Image.network(review.user?.image_url as String))
+                  : const SizedBox.shrink(),
+              Text(review.user?.email ?? '', style: theme.textTheme.headline4),
               Row(
                 children: [
                   Text(review.rating.toString(), style: TextStyle(color: theme.primaryColor)),

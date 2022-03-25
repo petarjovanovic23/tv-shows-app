@@ -10,9 +10,7 @@ class RegisterProvider extends RequestProvider<User> {
   }
 
   void registerUser(NetworkingRepository repository) {
-    executeRequest(
-        requestBuilder: () =>
-            repository.registerUser(_registerInfo.email as String, _registerInfo.password as String) as Future<User>);
+    executeRequest(requestBuilder: () => repository.registerUser(_registerInfo) as Future<User>);
   }
 
   RegisterInfo get registerInfo => _registerInfo;
@@ -20,6 +18,6 @@ class RegisterProvider extends RequestProvider<User> {
   void setInfo(String email, String password) {
     _registerInfo.email = email;
     _registerInfo.password = password;
-    _registerInfo.passwordConfirmation = password;
+    _registerInfo.password_confirmation = password;
   }
 }

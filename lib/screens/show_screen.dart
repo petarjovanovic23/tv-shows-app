@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/models/show.dart';
+import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/widgets/hidden_shows_widget.dart';
 import 'package:tv_shows/widgets/show_screen_top_widget.dart';
 import 'package:tv_shows/widgets/shows_list_widget.dart';
@@ -10,25 +11,34 @@ class ShowScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<ShowsProvider>(
-          create: (_) => ShowsProvider(),
-        ),
-        ChangeNotifierProvider<ShowsScreenContentProvider>(
-          create: (_) => ShowsScreenContentProvider(),
-        ),
-      ],
-      child: Scaffold(
-        body: LayoutBuilder(
+    return Scaffold(
+      body: MultiProvider(
+        providers: [
+          ChangeNotifierProvider<ShowsProvider>(
+            create: (context) => ShowsProvider(Provider.of<NetworkingRepository>(context, listen: false)),
+          ),
+          ChangeNotifierProvider<ShowsScreenContentProvider>(
+            create: (_) => ShowsScreenContentProvider(),
+          ),
+        ],
+        child: LayoutBuilder(
           builder: (context, constraints) {
+            ShowsProvider showsProvider = Provider.of<ShowsProvider>(context);
             return Column(
               children: [
                 const SizedBox(height: 44),
                 const ShowScreenTopWidget(),
-                Provider.of<ShowsScreenContentProvider>(context).isHidden
-                    ? HiddenShowsWidget(constraints)
-                    : ShowsListWidget(constraints),
+                showsProvider.state.maybeWhen(
+                  orElse: () => Container(),
+                  loading: () =>
+                      Expanded(child: Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor))),
+                  success: (shows) => Provider.of<ShowsScreenContentProvider>(context).isHidden
+                      ? HiddenShowsWidget(constraints)
+                      : ShowsListWidget(constraints),
+                  failure: (e) => const Expanded(
+                    child: Center(child: Text('Error retrieving shows. Please try again!')),
+                  ),
+                ),
               ],
             );
           },

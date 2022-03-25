@@ -11,7 +11,7 @@ class LoginProvider extends RequestProvider<User> {
 
   void loginUser(NetworkingRepository repository) {
     executeRequest(
-      requestBuilder: () => repository.loginUser(_loginInfo.email as String, _loginInfo.password as String),
+      requestBuilder: () => repository.loginUser(_loginInfo),
     );
   }
 

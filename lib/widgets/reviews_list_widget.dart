@@ -11,10 +11,10 @@ class ReviewsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Review> reviews = Provider.of<ReviewProvider>(context).getAllReviews();
+    List<Review> reviews = Provider.of<ReviewProvider>(context).getShowReviews(show);
     ThemeData theme = Theme.of(context);
 
-    return show.numOfReviews == 0
+    return show.no_of_reviews == 0
         ? Padding(
             padding: const EdgeInsets.all(24.0),
             child: Center(child: Text('No reviews yet.', style: theme.textTheme.bodyText1)),
@@ -25,13 +25,13 @@ class ReviewsListWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${show.numOfReviews} REVIEWS, ${show.averageRating} AVERAGE',
+                  '${show.no_of_reviews} REVIEWS, ${show.average_rating} AVERAGE',
                   style: theme.textTheme.bodyText1,
                 ),
                 RatingBar.builder(
                   ignoreGestures: true,
                   itemSize: 32,
-                  initialRating: show.averageRating,
+                  initialRating: show.average_rating as double,
                   minRating: 1,
                   direction: Axis.horizontal,
                   allowHalfRating: true,
@@ -43,15 +43,7 @@ class ReviewsListWidget extends StatelessWidget {
                   ),
                   onRatingUpdate: (_) {},
                 ),
-                SizedBox(
-                  height: 400,
-                  child: ListView.builder(
-                    itemCount: reviews.length,
-                    itemBuilder: (context, index) {
-                      return ReviewWidget(reviews[index]);
-                    },
-                  ),
-                ),
+                for (final review in reviews) ReviewWidget(review),
               ],
             ),
           );

@@ -23,6 +23,7 @@ class ButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     RegisterProvider? registerProvider;
     LoginProvider? loginProvider;
+
     if (buttonText == 'Register') {
       registerProvider = Provider.of<RegisterProvider>(context);
     } else {
@@ -40,34 +41,38 @@ class ButtonWidget extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
               ),
-          success: (nesto) => Text('Success'),
+          success: (user) => Text('Success'),
           failure: (e) => Text('FAILURE', style: TextStyle(color: Colors.red)));
     }
 
     Widget loginButton() {
       return loginProvider!.state.maybeWhen(
-          orElse: () =>
-              Text(buttonText, style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white)),
-          loading: () => SizedBox(
-                height: 12,
-                width: 12,
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-          success: (user) {
-            if (!user.isEmpty()) {
-              Future.delayed(
-                  const Duration(seconds: 1),
-                  () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => WelcomeScreen(loginProvider!.loginInfo.email as String))));
-              return Text('Success',
-                  style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white));
-            }
-            return Text('Something went wrong, try again',
+        orElse: () =>
+            Text(buttonText, style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white)),
+        loading: () => SizedBox(
+          height: 12,
+          width: 12,
+          child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        success: (user) {
+          if (!user.isEmpty()) {
+            Future.delayed(
+                const Duration(seconds: 1),
+                () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => WelcomeScreen(loginProvider!.loginInfo.email as String))));
+            return Text('Success',
                 style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white));
-          },
-          failure: (e) => Text('FAILURE LOGIN', style: TextStyle(color: Colors.red)));
+          }
+          return Text('Something went wrong, try again',
+              style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white));
+        },
+        failure: (e) => const Text(
+          'FAILURE LOGIN',
+          style: TextStyle(color: Colors.red),
+        ),
+      );
     }
 
     return Row(
@@ -91,10 +96,7 @@ class ButtonWidget extends StatelessWidget {
                   }),
                 ),
                 onPressed: isActiveButton ? callback : null,
-                child: registerProvider != null ? registerButton() : loginButton()
-                // Text(buttonText,
-                //         style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white)),
-                ),
+                child: registerProvider != null ? registerButton() : loginButton()),
           ),
         ),
       ],

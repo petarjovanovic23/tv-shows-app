@@ -1,54 +1,50 @@
-import 'package:flutter/cupertino.dart';
-import 'package:tv_shows/gen/assets.gen.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:tv_shows/models/show.dart';
+import 'package:tv_shows/models/user.dart';
+import 'package:tv_shows/providers/request_provider.dart';
+import 'package:tv_shows/repository/networking_repository.dart';
 
+part 'review.g.dart';
+
+@JsonSerializable()
 class Review {
+  String? id;
   String comment;
   int rating;
-  String userEmail;
-  String imageUrl;
-
+  int show_id;
+  User? user;
   Review({
+    required this.id,
     required this.comment,
     required this.rating,
-    required this.userEmail,
-    required this.imageUrl,
+    required this.show_id,
+    required this.user,
   });
 
-  static final allReviews = [
-    Review(
-      comment: 'This show is so good!!!',
-      rating: 5,
-      userEmail: 'test@gmail.com',
-      imageUrl: Assets.images.icProfilePlaceholderPng.path,
-    ),
-    Review(
-      comment: 'Sometimes maybe good sometimes maybe ...',
-      rating: 3,
-      userEmail: 'abasicuser@gmail.com',
-      imageUrl: Assets.images.icProfilePlaceholderPng.path,
-    ),
-    Review(
-      comment: 'OMG!! I can\'t believe they would add this on netflix',
-      rating: 1,
-      userEmail: 'angrycaren@gmail.com',
-      imageUrl: Assets.images.icProfilePlaceholderPng.path,
-    ),
-    Review(
-      comment: 'OMG!! I can\'t believe they would add this on netflix',
-      rating: 1,
-      userEmail: 'angrycaren@gmail.com',
-      imageUrl: Assets.images.icProfilePlaceholderPng.path,
-    ),
-    Review(
-      comment: 'OMG!! I can\'t believe they would add this on netflix',
-      rating: 1,
-      userEmail: 'angrycaren@gmail.com',
-      imageUrl: Assets.images.icProfilePlaceholderPng.path,
-    ),
-  ];
+  static List<Review> allReviews = [];
+
+  factory Review.fromJson(Map<String, dynamic> json) => _$ReviewFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ReviewToJson(this);
 }
 
-class ReviewProvider extends ChangeNotifier {
+class ReviewProvider extends RequestProvider<List<Review>> {
+  ReviewProvider(NetworkingRepository repository, Show show) {
+    _fetchReviews(repository, show);
+  }
+
+  void _fetchReviews(NetworkingRepository repository, Show show) {
+    executeRequest(requestBuilder: () => repository.fetchReviews(show, this));
+  }
+
+  List<Review> getShowReviews(Show show) {
+    return Review.allReviews.where((review) => review.show_id == int.parse(show.id as String)).toList();
+  }
+
+  void addReview(Review review) {
+    Review.allReviews.add(review);
+  }
+
   List<Review> getAllReviews() {
     return Review.allReviews;
   }

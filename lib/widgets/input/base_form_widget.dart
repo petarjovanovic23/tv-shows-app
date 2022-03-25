@@ -103,7 +103,6 @@ class _BaseFormWidgetState extends State<BaseFormWidget> {
               ],
             ),
           ),
-          // LoginButton(widget.buttonTitle, isActiveButton, emailController.text),
           ButtonWidget(widget.buttonTitle, isActiveButton, emailController.text, widget.buttonPressed),
         ],
       ),

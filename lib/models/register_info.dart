@@ -7,14 +7,14 @@ class RegisterInfo {
   RegisterInfo()
       : email = null,
         password = null,
-        passwordConfirmation = null;
+        password_confirmation = null;
   // RegisterInfo(this.email, this.password, this.passwordConfirmation);
   @override
   String toString() {
     return '$email, $password';
   }
 
-  String? email, password, passwordConfirmation;
+  String? email, password, password_confirmation;
 
   factory RegisterInfo.fromJson(Map<String, dynamic> json) => _$RegisterInfoFromJson(json);
 
