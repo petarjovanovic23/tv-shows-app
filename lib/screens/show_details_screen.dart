@@ -11,9 +11,44 @@ import '../repository/networking_repository.dart';
 import '../widgets/rating_bar_widget.dart';
 import '../widgets/show_details_widget.dart';
 
-class ShowDetailsScreen extends StatelessWidget {
+class ShowDetailsScreen extends StatefulWidget {
   final Show show;
   const ShowDetailsScreen(this.show, {Key? key}) : super(key: key);
+
+  @override
+  State<ShowDetailsScreen> createState() => _ShowDetailsScreenState();
+}
+
+class _ShowDetailsScreenState extends State<ShowDetailsScreen> {
+  late ScrollController _scrollController;
+
+  bool lastStatus = true;
+
+  _scrollListener() {
+    if (isShrink != lastStatus) {
+      setState(() {
+        lastStatus = isShrink;
+      });
+    }
+  }
+
+  bool get isShrink {
+    return _scrollController.hasClients && _scrollController.offset > (300 - kToolbarHeight);
+  }
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,27 +61,28 @@ class ShowDetailsScreen extends StatelessWidget {
       ),
       child: Scaffold(
         body: CustomScrollView(
+          controller: _scrollController,
           slivers: [
             SliverAppBar(
               pinned: true,
-              backgroundColor: const Color(0xff979797),
+              backgroundColor: Colors.white,
               centerTitle: true,
               expandedHeight: 300,
               flexibleSpace: FlexibleSpaceBar(
                 background: Image.network(
-                  show.imageUrl as String,
+                  widget.show.imageUrl as String,
                   fit: BoxFit.cover,
                   height: 322,
                 ),
                 title: Align(
                   alignment: Alignment.bottomLeft,
                   child: Text(
-                    show.title as String,
-                    style: const TextStyle(
+                    widget.show.title as String,
+                    style: TextStyle(
                       fontFamily: FontFamily.roboto,
-                      color: Colors.white,
+                      color: isShrink ? Colors.black : Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 32,
+                      fontSize: isShrink ? 24 : 32,
                     ),
                   ),
                 ),
@@ -55,7 +91,7 @@ class ShowDetailsScreen extends StatelessWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
-                child: Text(show.description as String, style: theme.textTheme.bodyText2),
+                child: Text(widget.show.description as String, style: theme.textTheme.bodyText2),
               ),
             ),
             SliverToBoxAdapter(
@@ -65,7 +101,7 @@ class ShowDetailsScreen extends StatelessWidget {
               ),
             ),
 
-            if (show.noOfReviews == 0)
+            if (widget.show.noOfReviews == 0)
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
@@ -77,7 +113,7 @@ class ShowDetailsScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: Text(
-                    '${show.noOfReviews} REVIEWS, ${show.averageRating} AVERAGE',
+                    '${widget.show.noOfReviews} REVIEWS, ${widget.show.averageRating} AVERAGE',
                     style: theme.textTheme.bodyText1,
                   ),
                 ),
@@ -85,11 +121,11 @@ class ShowDetailsScreen extends StatelessWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
-                child: RatingBarWidget(show),
+                child: RatingBarWidget(widget.show),
               ),
             ),
             //
-            SliverListReviewsWidget(show),
+            SliverListReviewsWidget(widget.show),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -101,7 +137,7 @@ class ShowDetailsScreen extends StatelessWidget {
                   ],
                   child: Builder(
                     builder: (context) {
-                      Provider.of<CurrentShowProvider>(context).currentShow = show;
+                      Provider.of<CurrentShowProvider>(context).currentShow = widget.show;
                       return const WriteReviewButton();
                     },
                   ),
