@@ -9,8 +9,6 @@ import 'package:tv_shows/models/show.dart';
 import 'package:tv_shows/models/sign_in_info.dart';
 import 'package:tv_shows/models/user.dart';
 
-import '../providers/review_provider.dart';
-
 class NetworkingRepository {
   NetworkingRepository(this._authInfoHolder) {
     final options = BaseOptions(baseUrl: 'https://tv-shows.infinum.academy');
@@ -61,43 +59,39 @@ class NetworkingRepository {
     }
   }
 
-  // TODO: showsPrvovider micati
   Future<List<Show>> fetchShows() async {
     try {
-      var response = await _dio.get('/shows');
-      var listResponse = response.data['shows'];
+      Response response = await _dio.get('/shows');
+      List<Map<String, dynamic>> listResponse = List<Map<String, dynamic>>.from(response.data['shows']);
 
       return listResponse.map((element) => Show.fromJson(element)).toList();
-    } catch (e) {
+    } catch (exception) {
       print('This is the error fetchShows message');
-      print(e);
+      print(exception);
       rethrow;
-      // return [];
     }
   }
 
-  // TODO:
-  Future<List<Review>> fetchReviews(Show show, ReviewProvider reviewProvider) async {
+  Future<List<Review>> fetchReviews(Show show) async {
     try {
-      reviewProvider.clear();
       var response = await _dio.get('/shows/${show.id}/reviews');
-      var listResponse = response.data['reviews'];
+      var listResponse = List<Map<String, dynamic>>.from(response.data['reviews']);
 
-      listResponse.asMap().forEach((index, element) {
-        Review review = Review.fromJson(listResponse[index]);
-        reviewProvider.addReview(review);
-      });
-
-      return reviewProvider.getAllReviews();
-    } catch (e) {
+      print('fetch reviews success');
+      return listResponse.map((element) => Review.fromJson(element)).toList();
+    } catch (exception) {
       print('This is the error fetchReviews message');
-      print(e);
-      return [];
+      print(exception);
+      rethrow;
     }
   }
 
   Future<Review> addReview(Review review) async {
     try {
+      if (review.comment == '') {
+        throw Exception('No comment');
+      }
+
       var response = await _dio.post('/reviews', data: {
         'comment': review.comment,
         'rating': review.rating,
@@ -106,11 +100,11 @@ class NetworkingRepository {
 
       // print(response.data['review']);
       return Review.fromJson(response.data['review']);
-    } catch (e) {
+    } catch (exception) {
       print("This is the error addReview message");
-      print(e);
+      print(exception);
 
-      return Review.empty();
+      rethrow;
     }
   }
 }

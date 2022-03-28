@@ -10,19 +10,7 @@ class ReviewProvider extends RequestProvider<List<Review>> {
   }
 
   void fetchReviews(NetworkingRepository repository, Show show) {
-    print('fetch reviews completed?');
-    executeRequest(requestBuilder: () => repository.fetchReviews(show, this));
-  }
-
-  void addReview(Review review) {
-    Review.allReviews.add(review);
-  }
-
-  List<Review> getAllReviews() {
-    return Review.allReviews;
-  }
-
-  void clear() {
-    Review.allReviews = [];
+    // print('fetch reviews completed?');
+    executeRequest(requestBuilder: () => repository.fetchReviews(show));
   }
 }

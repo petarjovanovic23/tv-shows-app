@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/widgets/rating_bar_widget.dart';
 
+import '../../models/review.dart';
 import '../../models/show.dart';
-import '../../providers/review_provider.dart';
 import '../../providers/write_review_provider.dart';
 
 class SubmitButtonWidget extends StatelessWidget {
-  const SubmitButtonWidget(this.show, this.textEditingController, this._context, this.callback, {Key? key})
-      : super(key: key);
+  const SubmitButtonWidget(this.show, this.textEditingController, this._context, {Key? key}) : super(key: key);
   final BuildContext _context;
   final Show show;
   final TextEditingController textEditingController;
-  final VoidCallback callback;
 
   @override
   Widget build(BuildContext context) {
@@ -39,33 +36,16 @@ class SubmitButtonWidget extends StatelessWidget {
                   return Theme.of(context).primaryColor;
                 }),
               ),
-              onPressed: callback,
-              child: writeReviewProvider.state.maybeWhen(
-                orElse: () {
-                  return const Text(
-                    'Submit',
-                    style: TextStyle(color: Colors.white),
-                  );
-                },
-                success: (review) {
-                  print('succeded to add review');
-                  Future.delayed(Duration(seconds: 1), () {
-                    Provider.of<ReviewProvider>(context, listen: false)
-                        .fetchReviews(context.read<NetworkingRepository>(), show);
-                    Navigator.of(context).pop();
-                  });
-                  return const Text(
-                    'Submit',
-                    style: TextStyle(color: Colors.white),
-                  );
-                },
-                loading: () => SizedBox(
-                  height: 12,
-                  width: 12,
-                  child: CircularProgressIndicator(
-                    color: Theme.of(context).primaryColor,
-                  ),
+              onPressed: () => writeReviewProvider.addReview(
+                Review.submit(
+                  textEditingController.text,
+                  rating,
+                  int.parse(show.id as String),
                 ),
+              ),
+              child: const Text(
+                'Submit',
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ),

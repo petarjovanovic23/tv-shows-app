@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tv_shows/providers/review_provider.dart';
 import 'package:tv_shows/widgets/review_widget.dart';
 
-import '../models/review.dart';
 import '../models/show.dart' show Show;
-import '../providers/review_provider.dart';
 
 class SliverListReviewsWidget extends StatelessWidget {
   final Show show;
@@ -13,16 +12,31 @@ class SliverListReviewsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Review> reviews = Provider.of<ReviewProvider>(context).getAllReviews();
-    ThemeData theme = Theme.of(context);
+    final reviewProvider = context.watch<ReviewProvider>();
 
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-          (context, index) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: ReviewWidget(reviews[index]),
-              ),
-          childCount: reviews.length),
+    return reviewProvider.state.maybeWhen(
+      orElse: () => Container(),
+      loading: () => SliverToBoxAdapter(
+        child: Center(
+          child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+      ),
+      success: (reviews) => SliverList(
+        delegate: SliverChildBuilderDelegate(
+            (context, index) =>
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 24.0), child: ReviewWidget(reviews[index])),
+            childCount: reviews.length),
+      ),
+      failure: (exception) => SliverToBoxAdapter(
+        child: Center(
+          child: Text(
+            'Failed to fetch reviews.',
+            style: Theme.of(context).textTheme.headline2,
+          ),
+        ),
+      ),
     );
   }
 }

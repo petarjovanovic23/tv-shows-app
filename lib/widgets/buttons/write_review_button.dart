@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tv_shows/models/auth_info_holder.dart';
 import 'package:tv_shows/models/show.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/write_review_screen.dart';
@@ -13,7 +12,7 @@ class WriteReviewButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CurrentShowProvider currentShowProvider = Provider.of<CurrentShowProvider>(context, listen: false);
+    CurrentShowProvider currentShowProvider = context.read<CurrentShowProvider>();
     Show show = currentShowProvider.currentShow;
     return Row(
       children: [
@@ -35,12 +34,8 @@ class WriteReviewButton extends StatelessWidget {
                     builder: (context) {
                       return MultiProvider(
                         providers: [
-                          Provider(
-                            create: (context) => NetworkingRepository(context.read<AuthInfoHolder>()),
-                          ),
-                          ListenableProvider(
-                            create: (context) =>
-                                ReviewProvider(Provider.of<NetworkingRepository>(context, listen: false), show),
+                          ChangeNotifierProvider(
+                            create: (context) => ReviewProvider(context.read<NetworkingRepository>(), show),
                           ),
                         ],
                         child: WriteReviewScreen(show),

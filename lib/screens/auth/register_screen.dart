@@ -36,7 +36,7 @@ class RegisterScreen extends StatelessWidget {
               showOtherButtonTitle: 'Sign in',
               buttonPressed: () => registerProvider.registerUser(context.read<NetworkingRepository>()),
               showOtherButtonPressed: switchScreen,
-              provider: registerProvider,
+              registerProvider: registerProvider,
             );
           },
         ),

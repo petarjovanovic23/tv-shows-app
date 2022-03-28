@@ -28,7 +28,7 @@ class RegisterFormWidget extends StatelessWidget {
       showOtherButtonTitle: showOtherButtonTitle,
       buttonPressed: buttonPressed,
       showOtherButtonPressed: showOtherButtonPressed,
-      provider: registerProvider,
+      registerProvider: registerProvider,
     );
   }
 }

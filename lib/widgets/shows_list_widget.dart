@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/show.dart';
 import '../providers/shows_provider.dart';
 import '../repository/networking_repository.dart';
 import 'show_card_widget.dart';
 
 class ShowsListWidget extends StatelessWidget {
+  const ShowsListWidget(this.constraints, this.shows, {Key? key}) : super(key: key);
+
   final BoxConstraints constraints;
-  const ShowsListWidget(this.constraints, {Key? key}) : super(key: key);
+  final List<Show> shows;
 
   Future<void> pullToRefresh(BuildContext context) async {
     NetworkingRepository repository = Provider.of<NetworkingRepository>(context, listen: false);
@@ -24,9 +27,9 @@ class ShowsListWidget extends StatelessWidget {
           color: Theme.of(context).primaryColor,
           onRefresh: () => pullToRefresh(context),
           child: ListView.builder(
-            itemCount: Provider.of<ShowsProvider>(context).getAllShows().length,
+            itemCount: shows.length,
             itemBuilder: (context, index) {
-              return ShowCardWidget(context, index);
+              return ShowCardWidget(context, shows[index]);
             },
           ),
         ),

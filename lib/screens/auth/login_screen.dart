@@ -41,7 +41,7 @@ class LoginScreen extends StatelessWidget {
               showOtherButtonTitle: 'Create account',
               buttonPressed: () => loginProvider.loginUser(context.read<NetworkingRepository>()),
               showOtherButtonPressed: switchScreen,
-              provider: loginProvider,
+              loginProvider: loginProvider,
             );
           },
         ),

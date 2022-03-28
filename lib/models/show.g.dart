@@ -10,16 +10,16 @@ Show _$ShowFromJson(Map<String, dynamic> json) => Show(
       id: json['id'] as String?,
       title: json['title'] as String?,
       description: json['description'] as String?,
-      noOfReviews: json['noOfReviews'] as int?,
-      averageRating: (json['averageRating'] as num?)?.toDouble(),
-      imageUrl: json['imageUrl'] as String?,
+      noOfReviews: json['no_of_reviews'] as int?,
+      averageRating: (json['average_rating'] as num?)?.toDouble(),
+      imageUrl: json['image_url'] as String?,
     );
 
 Map<String, dynamic> _$ShowToJson(Show instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'description': instance.description,
-      'noOfReviews': instance.noOfReviews,
-      'averageRating': instance.averageRating,
-      'imageUrl': instance.imageUrl,
+      'no_of_reviews': instance.noOfReviews,
+      'average_rating': instance.averageRating,
+      'image_url': instance.imageUrl,
     };

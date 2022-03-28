@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/gen/fonts.gen.dart';
 
-import '../screens/show_screen.dart' show ShowsScreenContentProvider;
+import '../providers/show_screen_content_provider.dart';
 
 class ShowScreenTopWidget extends StatelessWidget {
   const ShowScreenTopWidget({Key? key}) : super(key: key);

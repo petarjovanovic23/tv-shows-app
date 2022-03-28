@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
-import 'package:tv_shows/models/review.dart';
+import 'package:tv_shows/providers/provider_listener.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
+import 'package:tv_shows/widgets/modals/error_modal.dart';
 import 'package:tv_shows/widgets/rating_bar_widget.dart';
 
 import '../models/show.dart';
@@ -38,66 +39,73 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ListenableProvider(
+        ChangeNotifierProvider(
           create: (_) => RatingBarProvider(),
         ),
-        ListenableProvider(
+        ChangeNotifierProvider(
           create: (context) => WriteReviewProvider(
             context.read<NetworkingRepository>(),
             context.read<ReviewProvider>(),
           ),
         ),
       ],
-      child: LayoutBuilder(builder: (context, constraints) {
-        ThemeData theme = Theme.of(context);
-
-        return SingleChildScrollView(
-          child: Container(
-            height: constraints.maxHeight * 0.55,
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Write a review',
-                      style: theme.textTheme.headline3,
-                    ),
-                    GestureDetector(
-                      child: const Icon(Icons.close),
-                      onTap: () => Navigator.of(context).pop(),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8.0),
-                RatingBarWidget(
-                  widget.show,
-                  fixed: false,
-                ),
-                ReviewInputFieldWidget(label: 'Comment', controller: textEditingController),
-                const SizedBox(height: 8.0),
-                Builder(builder: (context) {
-                  int rating = Provider.of<RatingBarProvider>(context).rating;
-                  WriteReviewProvider writeReviewProvider = Provider.of<WriteReviewProvider>(context);
-
-                  void callback() {
-                    Review review =
-                        Review.submit(textEditingController.text, rating, int.parse(widget.show.id as String));
-                    writeReviewProvider.addReview(review);
-                    // Navigator.of(context).pop();
-                  }
-
-                  return SubmitButtonWidget(widget.show, textEditingController, context, callback);
-                }),
-              ],
+      child: ProviderListener<WriteReviewProvider>(
+        listener: (context, writeReviewProvider) {
+          writeReviewProvider.state.maybeWhen(
+            orElse: () => Container(),
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
             ),
-          ),
-        );
-      }),
+            success: (review) {
+              context.read<ReviewProvider>().fetchReviews(context.read<NetworkingRepository>(), widget.show);
+              Navigator.of(context).pop();
+            },
+            failure: (exception) {
+              showDialog(context: context, builder: (context) => ErrorModal(context));
+            },
+          );
+        },
+        child: LayoutBuilder(builder: (context, constraints) {
+          ThemeData theme = Theme.of(context);
+
+          return SingleChildScrollView(
+            child: Container(
+              height: constraints.maxHeight * 0.55,
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Write a review',
+                        style: theme.textTheme.headline3,
+                      ),
+                      GestureDetector(
+                        child: const Icon(Icons.close),
+                        onTap: () => Navigator.of(context).pop(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8.0),
+                  RatingBarWidget(
+                    widget.show,
+                    fixed: false,
+                  ),
+                  ReviewInputFieldWidget(label: 'Comment', controller: textEditingController),
+                  const SizedBox(height: 8.0),
+                  Builder(builder: (context) {
+                    return SubmitButtonWidget(widget.show, textEditingController, context);
+                  }),
+                ],
+              ),
+            ),
+          );
+        }),
+      ),
     );
   }
 }

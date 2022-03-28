@@ -3,7 +3,6 @@ import 'package:tv_shows/providers/register_provider.dart';
 import 'package:tv_shows/widgets/buttons/base_button_widget.dart';
 
 import '../../providers/login_provider.dart';
-import '../../providers/request_provider.dart';
 import 'input_field_widget.dart';
 import 'password_input_field_widget.dart';
 
@@ -16,12 +15,14 @@ class BaseFormWidget extends StatefulWidget {
     required this.showOtherButtonTitle,
     required this.buttonPressed,
     required this.showOtherButtonPressed,
-    required this.provider,
+    this.registerProvider,
+    this.loginProvider,
   }) : super(key: key);
 
   final String title, description, buttonTitle, showOtherButtonTitle;
   final VoidCallback buttonPressed, showOtherButtonPressed;
-  RequestProvider provider;
+  RegisterProvider? registerProvider;
+  LoginProvider? loginProvider;
 
   @override
   State<BaseFormWidget> createState() => _BaseFormWidgetState();
@@ -38,10 +39,10 @@ class _BaseFormWidgetState extends State<BaseFormWidget> {
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       setState(() => isActiveButton = false);
     } else if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-      if (widget.provider.runtimeType == RegisterProvider) {
-        ((widget.provider) as RegisterProvider).setInfo(emailController.text, passwordController.text);
+      if (widget.loginProvider != null) {
+        widget.loginProvider!.setInfo(emailController.text, passwordController.text);
       } else {
-        ((widget.provider) as LoginProvider).setInfo(emailController.text, passwordController.text);
+        widget.registerProvider!.setInfo(emailController.text, passwordController.text);
       }
       setState(() => isActiveButton = true);
     }
@@ -102,8 +103,11 @@ class _BaseFormWidgetState extends State<BaseFormWidget> {
               ],
             ),
           ),
-          BaseButtonWidget(
-              widget.buttonTitle, isActiveButton, emailController.text, widget.buttonPressed, widget.provider),
+          widget.registerProvider != null
+              ? BaseButtonWidget(widget.buttonTitle, isActiveButton, emailController.text, widget.buttonPressed,
+                  widget.registerProvider)
+              : BaseButtonWidget(
+                  widget.buttonTitle, isActiveButton, emailController.text, widget.buttonPressed, widget.loginProvider),
         ],
       ),
     );

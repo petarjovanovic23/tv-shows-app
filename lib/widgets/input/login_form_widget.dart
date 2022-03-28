@@ -28,7 +28,7 @@ class LoginFormWidget extends StatelessWidget {
       showOtherButtonTitle: showOtherButtonTitle,
       buttonPressed: buttonPressed,
       showOtherButtonPressed: showOtherButtonPressed,
-      provider: loginProvider,
+      loginProvider: loginProvider,
     );
   }
 }
