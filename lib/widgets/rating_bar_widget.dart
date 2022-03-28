@@ -14,7 +14,7 @@ class RatingBarWidget extends StatelessWidget {
     return RatingBar.builder(
       ignoreGestures: fixed,
       itemSize: 32,
-      initialRating: show.average_rating as double,
+      initialRating: show.averageRating as double,
       minRating: 1,
       direction: Axis.horizontal,
       allowHalfRating: fixed,

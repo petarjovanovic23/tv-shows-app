@@ -6,6 +6,8 @@ import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/widgets/rating_bar_widget.dart';
 
 import '../models/show.dart';
+import '../providers/review_provider.dart';
+import '../providers/write_review_provider.dart';
 import '../widgets/buttons/submit_button_widget.dart';
 import '../widgets/input/review_input_field_widget.dart';
 

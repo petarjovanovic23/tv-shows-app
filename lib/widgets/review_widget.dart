@@ -18,9 +18,9 @@ class ReviewWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              review.user?.image_url != null
+              review.user?.imageUrl != null
                   ? CircleAvatar(
-                      backgroundColor: Colors.transparent, child: Image.network(review.user?.image_url as String))
+                      backgroundColor: Colors.transparent, child: Image.network(review.user?.imageUrl as String))
                   : CircleAvatar(
                       maxRadius: 15,
                       backgroundColor: Colors.transparent,

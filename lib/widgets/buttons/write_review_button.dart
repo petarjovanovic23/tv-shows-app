@@ -5,7 +5,8 @@ import 'package:tv_shows/models/show.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/write_review_screen.dart';
 
-import '../../models/review.dart';
+import '../../providers/current_show_provider.dart';
+import '../../providers/review_provider.dart';
 
 class WriteReviewButton extends StatelessWidget {
   const WriteReviewButton({Key? key}) : super(key: key);

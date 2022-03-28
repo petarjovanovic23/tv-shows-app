@@ -9,6 +9,8 @@ import 'package:tv_shows/models/show.dart';
 import 'package:tv_shows/models/sign_in_info.dart';
 import 'package:tv_shows/models/user.dart';
 
+import '../providers/review_provider.dart';
+
 class NetworkingRepository {
   NetworkingRepository(this._authInfoHolder) {
     final options = BaseOptions(baseUrl: 'https://tv-shows.infinum.academy');
@@ -36,9 +38,7 @@ class NetworkingRepository {
       print('This is the success register message');
       return User.fromJson(response.data['user']);
     } catch (e) {
-      print('This is the error register message');
-      print(e);
-      return User.empty();
+      rethrow;
     }
   }
 
@@ -56,31 +56,23 @@ class NetworkingRepository {
       return User.fromJson(response.data['user']);
     } catch (error) {
       print('This is the error login message');
-
       print(error);
       rethrow;
-      return User.empty();
     }
   }
 
   // TODO: showsPrvovider micati
-  Future<List<Show>> fetchShows(ShowsProvider showsProvider) async {
+  Future<List<Show>> fetchShows() async {
     try {
       var response = await _dio.get('/shows');
       var listResponse = response.data['shows'];
 
       return listResponse.map((element) => Show.fromJson(element)).toList();
-
-      listResponse.asMap().forEach((index, element) {
-        Show show = Show.fromJson(listResponse[index]);
-        showsProvider.addShow(show);
-      });
-
-      return showsProvider.getAllShows();
     } catch (e) {
       print('This is the error fetchShows message');
       print(e);
-      return [];
+      rethrow;
+      // return [];
     }
   }
 
@@ -109,7 +101,7 @@ class NetworkingRepository {
       var response = await _dio.post('/reviews', data: {
         'comment': review.comment,
         'rating': review.rating,
-        'show_id': review.show_id,
+        'show_id': review.showId,
       });
 
       // print(response.data['review']);

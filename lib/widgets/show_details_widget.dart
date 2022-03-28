@@ -4,6 +4,7 @@ import 'package:tv_shows/widgets/review_widget.dart';
 
 import '../models/review.dart';
 import '../models/show.dart' show Show;
+import '../providers/review_provider.dart';
 
 class SliverListReviewsWidget extends StatelessWidget {
   final Show show;

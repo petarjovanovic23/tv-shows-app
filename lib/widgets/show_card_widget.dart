@@ -5,6 +5,7 @@ import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/show_details_screen.dart';
 
 import '../models/show.dart';
+import '../providers/shows_provider.dart';
 
 class ShowCardWidget extends StatelessWidget {
   final BuildContext context;
@@ -39,7 +40,7 @@ class ShowCardWidget extends StatelessWidget {
             children: [
               Center(
                 child: Image.network(
-                  currentShow.image_url as String,
+                  currentShow.imageUrl as String,
                   height: 182,
                 ),
               ),

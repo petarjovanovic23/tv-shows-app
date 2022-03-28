@@ -3,19 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/providers/login_provider.dart';
 import 'package:tv_shows/providers/register_provider.dart';
-import 'package:tv_shows/screens/welcome_screen.dart';
+import 'package:tv_shows/providers/request_provider.dart';
 
-class ButtonWidget extends StatelessWidget {
+class BaseButtonWidget extends StatelessWidget {
   final String buttonText;
   bool isActiveButton;
   final String userEmail;
   final VoidCallback callback;
+  final RequestProvider provider;
 
-  ButtonWidget(
+  BaseButtonWidget(
     this.buttonText,
     this.isActiveButton,
     this.userEmail,
-    this.callback, {
+    this.callback,
+    this.provider, {
     Key? key,
   }) : super(key: key);
 
@@ -32,31 +34,16 @@ class ButtonWidget extends StatelessWidget {
 
     Widget registerButton() {
       return registerProvider!.state.maybeWhen(
-          orElse: () =>
-              Text(buttonText, style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white)),
-          loading: () => SizedBox(
-                height: 10,
-                width: 10,
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-          success: (user) {
-            if (!user.isEmpty()) {
-              return Text(
-                'Success',
-                style: TextStyle(color: Theme.of(context).primaryColor),
-              );
-            }
-
-            // TODO: Implement error showDialog
-            return Text('Register',
-                style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white));
-          },
-          failure: (e) {
-            print(e.toString());
-            return Text('FAILURE REGISTER', style: TextStyle(color: Colors.red));
-          });
+        orElse: () =>
+            Text(buttonText, style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white)),
+        loading: () => SizedBox(
+          height: 10,
+          width: 10,
+          child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+      );
     }
 
     Widget loginButton() {
@@ -68,25 +55,6 @@ class ButtonWidget extends StatelessWidget {
           width: 12,
           child: CircularProgressIndicator(
             color: Theme.of(context).primaryColor,
-          ),
-        ),
-        success: (user) {
-          if (!user.isEmpty()) {
-            Future.delayed(
-                const Duration(seconds: 1),
-                () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => WelcomeScreen(loginProvider!.loginInfo.email as String))));
-            return Text('Success',
-                style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white));
-          }
-          // TODO: Implement error showDialog
-
-          return Text('Login', style: TextStyle(color: isActiveButton ? Theme.of(context).primaryColor : Colors.white));
-        },
-        failure: (e) => const AlertDialog(
-          title: Text(
-            'FAILURE LOGIN',
-            style: TextStyle(color: Colors.red),
           ),
         ),
       );
@@ -113,7 +81,7 @@ class ButtonWidget extends StatelessWidget {
                   }),
                 ),
                 onPressed: isActiveButton ? callback : null,
-                child: registerProvider != null ? registerButton() : loginButton()),
+                child: provider.runtimeType == RegisterProvider ? registerButton() : loginButton()),
           ),
         ),
       ],

@@ -4,8 +4,10 @@ import 'package:tv_shows/gen/fonts.gen.dart';
 import 'package:tv_shows/widgets/buttons/write_review_button.dart';
 import 'package:tv_shows/widgets/show_details_widget.dart';
 
-import '../models/review.dart';
 import '../models/show.dart' show CurrentShowProvider, Show;
+import '../providers/current_show_provider.dart';
+import '../providers/review_provider.dart';
+import '../providers/write_review_provider.dart';
 import '../repository/networking_repository.dart';
 import '../widgets/rating_bar_widget.dart';
 
@@ -39,7 +41,7 @@ class ShowDetailsScreen extends StatelessWidget {
                   expandedHeight: 300,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Image.network(
-                      show.image_url as String,
+                      show.imageUrl as String,
                       fit: BoxFit.cover,
                       height: 322,
                     ),
@@ -69,7 +71,7 @@ class ShowDetailsScreen extends StatelessWidget {
                     child: Text('Reviews', style: theme.textTheme.headline3),
                   ),
                 ),
-                if (show.no_of_reviews == 0)
+                if (show.noOfReviews == 0)
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.all(24.0),
@@ -81,7 +83,7 @@ class ShowDetailsScreen extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: Text(
-                        '${show.no_of_reviews} REVIEWS, ${show.average_rating} AVERAGE',
+                        '${show.noOfReviews} REVIEWS, ${show.averageRating} AVERAGE',
                         style: theme.textTheme.bodyText1,
                       ),
                     ),

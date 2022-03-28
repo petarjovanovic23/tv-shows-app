@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/show.dart' show ShowsProvider;
+import '../providers/shows_provider.dart';
 import '../repository/networking_repository.dart';
 import 'show_card_widget.dart';
 
@@ -12,7 +12,7 @@ class ShowsListWidget extends StatelessWidget {
   Future<void> pullToRefresh(BuildContext context) async {
     NetworkingRepository repository = Provider.of<NetworkingRepository>(context, listen: false);
     ShowsProvider showsProvider = Provider.of<ShowsProvider>(context, listen: false);
-    await showsProvider.executeRequest(requestBuilder: () => repository.fetchShows(showsProvider));
+    await showsProvider.executeRequest(requestBuilder: () => repository.fetchShows());
   }
 
   @override

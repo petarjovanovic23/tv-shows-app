@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/widgets/rating_bar_widget.dart';
 
-import '../../models/review.dart';
 import '../../models/show.dart';
+import '../../providers/review_provider.dart';
+import '../../providers/write_review_provider.dart';
 
 class SubmitButtonWidget extends StatelessWidget {
   const SubmitButtonWidget(this.show, this.textEditingController, this._context, this.callback, {Key? key})
