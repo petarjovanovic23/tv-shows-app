@@ -57,7 +57,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
               child: CircularProgressIndicator(),
             ),
             success: (review) {
-              context.read<ReviewProvider>().fetchReviews(context.read<NetworkingRepository>(), widget.show);
+              writeReviewProvider.reviewProvider.fetchReviews(context.read<NetworkingRepository>(), widget.show);
               Navigator.of(context).pop();
             },
             failure: (exception) {

@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tv_shows/providers/login_provider.dart';
-import 'package:tv_shows/providers/register_provider.dart';
 
 class BaseButtonWidget extends StatelessWidget {
   final String buttonText;
@@ -21,9 +19,6 @@ class BaseButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RegisterProvider? registerProvider;
-    LoginProvider? loginProvider;
-
     Widget buttonChild() {
       return provider!.state.maybeWhen(
         orElse: () =>

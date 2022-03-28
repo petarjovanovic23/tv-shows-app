@@ -5,13 +5,12 @@ import '../models/review.dart';
 import '../repository/networking_repository.dart';
 
 class WriteReviewProvider extends RequestProvider<Review> {
-  WriteReviewProvider(NetworkingRepository repository, ReviewProvider reviewProvider) {
+  WriteReviewProvider(NetworkingRepository repository, this.reviewProvider) {
     _repository = repository;
-    _reviewProvider = reviewProvider;
   }
 
   late final NetworkingRepository _repository;
-  late final ReviewProvider _reviewProvider;
+  late final ReviewProvider reviewProvider;
 
   void addReview(Review review) {
     executeRequest(requestBuilder: () => _repository.addReview(review));
