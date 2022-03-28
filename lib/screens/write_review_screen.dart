@@ -65,7 +65,55 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
             },
           );
         },
-        child: LayoutBuilder(builder: (context, constraints) {
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            ThemeData theme = Theme.of(context);
+
+            return SingleChildScrollView(
+              child: Container(
+                height: constraints.maxHeight * 0.55,
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Write a review',
+                          style: theme.textTheme.headline3,
+                        ),
+                        GestureDetector(
+                          child: const Icon(Icons.close),
+                          onTap: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8.0),
+                    RatingBarWidget(
+                      widget.show,
+                      fixed: false,
+                    ),
+                    ReviewInputFieldWidget(label: 'Comment', controller: textEditingController),
+                    const SizedBox(height: 8.0),
+                    Builder(builder: (context) {
+                      return SubmitButtonWidget(widget.show, textEditingController, context);
+                    }),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+/*
+* LayoutBuilder(builder: (context, constraints) {
           ThemeData theme = Theme.of(context);
 
           return SingleChildScrollView(
@@ -104,8 +152,4 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
               ),
             ),
           );
-        }),
-      ),
-    );
-  }
-}
+        }),*/
