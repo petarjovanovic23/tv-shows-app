@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tv_shows/gen/assets.gen.dart';
 import 'package:tv_shows/models/review.dart';
 
 class ReviewWidget extends StatelessWidget {
@@ -20,7 +21,10 @@ class ReviewWidget extends StatelessWidget {
               review.user?.image_url != null
                   ? CircleAvatar(
                       backgroundColor: Colors.transparent, child: Image.network(review.user?.image_url as String))
-                  : const SizedBox.shrink(),
+                  : CircleAvatar(
+                      maxRadius: 15,
+                      backgroundColor: Colors.transparent,
+                      child: Assets.images.icProfilePlaceholderPng.image()),
               Text(review.user?.email ?? '', style: theme.textTheme.headline4),
               Row(
                 children: [

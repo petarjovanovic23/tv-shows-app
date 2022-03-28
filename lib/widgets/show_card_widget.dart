@@ -15,6 +15,7 @@ class ShowCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Show currentShow = Provider.of<ShowsProvider>(context).getAllShows()[index];
+
     TextTheme theme = Theme.of(context).textTheme;
 
     return GestureDetector(

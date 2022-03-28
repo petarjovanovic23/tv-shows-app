@@ -5,16 +5,21 @@ import 'package:tv_shows/models/review.dart';
 import 'package:tv_shows/models/show.dart';
 import 'package:tv_shows/widgets/review_widget.dart';
 
-class ReviewsListWidget extends StatelessWidget {
+class ReviewsListWidget extends StatefulWidget {
   final Show show;
   const ReviewsListWidget(this.show, {Key? key}) : super(key: key);
 
+  @override
+  State<ReviewsListWidget> createState() => _ReviewsListWidgetState();
+}
+
+class _ReviewsListWidgetState extends State<ReviewsListWidget> {
   @override
   Widget build(BuildContext context) {
     List<Review> reviews = Provider.of<ReviewProvider>(context).getAllReviews();
     ThemeData theme = Theme.of(context);
 
-    return show.no_of_reviews == 0
+    return widget.show.no_of_reviews == 0
         ? Padding(
             padding: const EdgeInsets.all(24.0),
             child: Center(child: Text('No reviews yet.', style: theme.textTheme.bodyText1)),
@@ -25,13 +30,13 @@ class ReviewsListWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${show.no_of_reviews} REVIEWS, ${show.average_rating} AVERAGE',
+                  '${widget.show.no_of_reviews} REVIEWS, ${widget.show.average_rating} AVERAGE',
                   style: theme.textTheme.bodyText1,
                 ),
                 RatingBar.builder(
                   ignoreGestures: true,
                   itemSize: 32,
-                  initialRating: show.average_rating as double,
+                  initialRating: widget.show.average_rating as double,
                   minRating: 1,
                   direction: Axis.horizontal,
                   allowHalfRating: true,

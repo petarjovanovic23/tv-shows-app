@@ -13,6 +13,7 @@ class TvShowsApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(create: (context) => AuthInfoHolder()),
+        // TODO: implementirati Provider(create: (context) => NetworkingRepository(context.read<AuthInfoHolder>()))
       ],
       child: MaterialApp(
         theme: ThemeData.light().copyWith(

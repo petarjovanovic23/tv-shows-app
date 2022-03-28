@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tv_shows/providers/request_provider.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
@@ -45,4 +46,15 @@ class ShowsProvider extends RequestProvider<List<Show>> {
   List<Show> getAllShows() {
     return Show.allShows;
   }
+}
+
+class CurrentShowProvider extends ChangeNotifier {
+  late Show _currentShow;
+
+  set currentShow(Show show) {
+    _currentShow = show;
+    // notifyListeners();
+  }
+
+  Show get currentShow => _currentShow;
 }

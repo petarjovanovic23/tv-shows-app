@@ -54,18 +54,22 @@ class NetworkingRepository {
 
       print('This is the success login message');
       return User.fromJson(response.data['user']);
-    } catch (e) {
+    } catch (error) {
       print('This is the error login message');
 
-      print(e);
+      print(error);
+      rethrow;
       return User.empty();
     }
   }
 
+  // TODO: showsPrvovider micati
   Future<List<Show>> fetchShows(ShowsProvider showsProvider) async {
     try {
       var response = await _dio.get('/shows');
       var listResponse = response.data['shows'];
+
+      return listResponse.map((element) => Show.fromJson(element)).toList();
 
       listResponse.asMap().forEach((index, element) {
         Show show = Show.fromJson(listResponse[index]);
@@ -80,6 +84,7 @@ class NetworkingRepository {
     }
   }
 
+  // TODO:
   Future<List<Review>> fetchReviews(Show show, ReviewProvider reviewProvider) async {
     try {
       reviewProvider.clear();
@@ -96,6 +101,24 @@ class NetworkingRepository {
       print('This is the error fetchReviews message');
       print(e);
       return [];
+    }
+  }
+
+  Future<Review> addReview(Review review) async {
+    try {
+      var response = await _dio.post('/reviews', data: {
+        'comment': review.comment,
+        'rating': review.rating,
+        'show_id': review.show_id,
+      });
+
+      // print(response.data['review']);
+      return Review.fromJson(response.data['review']);
+    } catch (e) {
+      print("This is the error addReview message");
+      print(e);
+
+      return Review.empty();
     }
   }
 }
