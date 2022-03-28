@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tv_shows/models/auth_info_holder.dart';
+import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/show_details_screen.dart';
 
-import '../classes/show.dart';
+import '../models/show.dart';
 
 class ShowCardWidget extends StatelessWidget {
   final BuildContext context;
@@ -17,7 +19,14 @@ class ShowCardWidget extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => ShowDetailsScreen(currentShow)));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => Provider(
+              create: (context) => NetworkingRepository(Provider.of<AuthInfoHolder>(context, listen: false)),
+              child: ShowDetailsScreen(currentShow),
+            ),
+          ),
+        );
       },
       child: SizedBox(
         height: 302,
@@ -27,20 +36,23 @@ class ShowCardWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                currentShow.imageUrl,
+              Center(
+                child: Image.network(
+                  currentShow.image_url as String,
+                  height: 182,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
                 child: Text(
-                  currentShow.name,
+                  currentShow.title ?? '',
                   style: theme.headline2,
                 ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text(
-                  currentShow.description,
+                  currentShow.description ?? '',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: theme.bodyText1,
