@@ -15,7 +15,7 @@ class ReviewProvider extends RequestProvider<List<Review>> {
   void fetchReviews() {
     executeRequest(requestBuilder: () {
       final rev = _repository.fetchReviews(_show);
-      notifyListeners();
+      // notifyListeners();
       return rev;
     });
   }
