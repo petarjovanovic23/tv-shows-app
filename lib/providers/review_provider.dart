@@ -5,12 +5,19 @@ import '../models/show.dart';
 import '../repository/networking_repository.dart';
 
 class ReviewProvider extends RequestProvider<List<Review>> {
-  ReviewProvider(NetworkingRepository repository, Show show) {
-    fetchReviews(repository, show);
+  ReviewProvider(this._repository, this._show) {
+    fetchReviews();
   }
 
-  void fetchReviews(NetworkingRepository repository, Show show) {
-    // print('fetch reviews completed?');
-    executeRequest(requestBuilder: () => repository.fetchReviews(show));
+  final NetworkingRepository _repository;
+  final Show _show;
+
+  void fetchReviews() {
+    executeRequest(requestBuilder: () {
+      final rev = _repository.fetchReviews(_show);
+      notifyListeners();
+      return rev;
+    });
   }
+
 }

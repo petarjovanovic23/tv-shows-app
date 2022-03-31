@@ -9,7 +9,7 @@ import '../providers/review_provider.dart';
 import '../providers/write_review_provider.dart';
 import '../repository/networking_repository.dart';
 import '../widgets/rating_bar_widget.dart';
-import '../widgets/show_details_widget.dart';
+import '../widgets/sliver_list_reviews_widget.dart';
 
 class ShowDetailsScreen extends StatefulWidget {
   final Show show;
