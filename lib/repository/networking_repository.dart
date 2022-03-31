@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:tv_shows/models/auth_info.dart';
-import 'package:tv_shows/models/auth_info_holder.dart';
 import 'package:tv_shows/models/auth_info_interceptor.dart';
 import 'package:tv_shows/models/error_extractor_interceptor.dart';
 import 'package:tv_shows/models/register_info.dart';
 import 'package:tv_shows/models/review.dart';
 import 'package:tv_shows/models/show.dart';
 import 'package:tv_shows/models/sign_in_info.dart';
+import 'package:tv_shows/models/storage_repository.dart';
 import 'package:tv_shows/models/user.dart';
 
 class NetworkingRepository {
@@ -21,7 +21,7 @@ class NetworkingRepository {
   }
 
   late final Dio _dio;
-  final AuthInfoHolder _authInfoHolder;
+  final StorageRepository _authInfoHolder;
 
   Future<User> registerUser(RegisterInfo registerInfo) async {
     try {
@@ -32,6 +32,8 @@ class NetworkingRepository {
 
       final info = AuthInfo.fromHeaderMap(response.headers.map);
       _authInfoHolder.setInfo(info);
+
+      _authInfoHolder.store(User.fromJson(response.data['user']));
 
       print('This is the success register message');
       return User.fromJson(response.data['user']);
@@ -49,6 +51,8 @@ class NetworkingRepository {
 
       final info = AuthInfo.fromHeaderMap(response.headers.map);
       _authInfoHolder.setInfo(info);
+
+      _authInfoHolder.store(User.fromJson(response.data['user']));
 
       print('This is the success login message');
       return User.fromJson(response.data['user']);

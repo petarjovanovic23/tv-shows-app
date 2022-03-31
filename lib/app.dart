@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tv_shows/models/auth_info_holder.dart';
+import 'package:tv_shows/models/storage_repository.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/auth/login_screen.dart';
 
@@ -13,8 +13,8 @@ class TvShowsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (context) => AuthInfoHolder()),
-        Provider(create: (context) => NetworkingRepository(context.read<AuthInfoHolder>()))
+        Provider(create: (context) => StorageRepository()),
+        Provider(create: (context) => NetworkingRepository(context.read<StorageRepository>()))
       ],
       child: MaterialApp(
         theme: ThemeData.light().copyWith(
