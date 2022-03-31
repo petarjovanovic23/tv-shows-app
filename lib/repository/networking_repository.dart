@@ -81,6 +81,8 @@ class NetworkingRepository {
       var response = await _dio.get('/shows/${show.id}/reviews');
       var listResponse = List<Map<String, dynamic>>.from(response.data['reviews']);
 
+
+      print('potonji ${listResponse.first}');
       print('fetch reviews success');
       return listResponse.map((element) => Review.fromJson(element)).toList();
     } catch (exception) {

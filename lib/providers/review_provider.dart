@@ -1,16 +1,25 @@
+import 'package:provider/provider.dart';
 import 'package:tv_shows/providers/request_provider.dart';
 
 import '../models/review.dart';
 import '../models/show.dart';
 import '../repository/networking_repository.dart';
 
-class ReviewProvider extends RequestProvider<List<Review>> {
-  ReviewProvider(NetworkingRepository repository, Show show) {
-    fetchReviews(repository, show);
+class ReviewProvider extends RequestProvider<List<Review>>  {
+  ReviewProvider(this._repository, this._show) {
+    fetchReviews();
   }
 
-  void fetchReviews(NetworkingRepository repository, Show show) {
-    // print('fetch reviews completed?');
-    executeRequest(requestBuilder: () => repository.fetchReviews(show));
+  final NetworkingRepository _repository;
+  final Show _show;
+
+  void fetchReviews() {
+    executeRequest(requestBuilder: ()  async {
+
+      final rev = _repository.fetchReviews(_show);
+      notifyListeners();
+      return rev;
+    });
   }
+
 }

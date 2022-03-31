@@ -9,11 +9,10 @@ class SliverListReviewsWidget extends StatelessWidget {
   final Show show;
 
   const SliverListReviewsWidget(this.show, {Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final reviewProvider = context.watch<ReviewProvider>();
-
+    print('rebuild?');
     return reviewProvider.state.maybeWhen(
       orElse: () => Container(),
       loading: () => SliverToBoxAdapter(

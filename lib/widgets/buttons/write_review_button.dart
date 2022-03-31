@@ -14,6 +14,24 @@ class WriteReviewButton extends StatelessWidget {
   Widget build(BuildContext context) {
     CurrentShowProvider currentShowProvider = context.read<CurrentShowProvider>();
     Show show = currentShowProvider.currentShow;
+
+    void showWriteReviewSheet() {
+      showModalBottomSheet(
+
+          isScrollControlled: true,
+          context: context,
+          builder: (context) {
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (context) => ReviewProvider(context.read<NetworkingRepository>(), show),
+                ),
+              ],
+              child: WriteReviewScreen(show),
+            );
+          });
+    }
+
     return Row(
       children: [
         Expanded(
@@ -27,21 +45,7 @@ class WriteReviewButton extends StatelessWidget {
                 padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 16)),
                 backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor),
               ),
-              onPressed: () {
-                showModalBottomSheet(
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (context) {
-                      return MultiProvider(
-                        providers: [
-                          ChangeNotifierProvider(
-                            create: (context) => ReviewProvider(context.read<NetworkingRepository>(), show),
-                          ),
-                        ],
-                        child: WriteReviewScreen(show),
-                      );
-                    });
-              },
+              onPressed: showWriteReviewSheet,
               child: const Text('Write a Review', style: TextStyle(color: Colors.white)),
             ),
           ),
