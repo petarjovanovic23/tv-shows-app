@@ -76,7 +76,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               success: (user) {
                 context
                     .read<StorageRepository>()
-                    .store(user.toJson(), user.id as String);
+                    .store(user.toJson(), user.email as String);
                 Navigator.of(context).pop();
               },
               failure: (exception) => showDialog(

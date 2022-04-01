@@ -141,33 +141,31 @@ class NetworkingRepository {
 
   Future<User> updateUserData(String? email, PickedFile? image) async {
     try {
-      late Response response;
-      if (email != '' && image != null) {
-        response = await _dio.put('/users',
-            data: FormData.fromMap(
-              {
-                'email': email,
-                'image': await MultipartFile.fromFile(image.path),
-              },
-            ));
-      }
-
-      if (email == '' && image != null) {
-        response = await _dio.put('/users',
-            data: FormData.fromMap(
-              {
-                'image': await MultipartFile.fromFile(image.path),
-              },
-            ));
-      } else if (email != '' && image == null) {
-        response = await _dio.put('/users',
-            data: FormData.fromMap(
-              {
-                'email': email,
-                'image': await MultipartFile.fromFile(image!.path),
-              },
-            ));
-      }
+      Response response;
+      // if (email != '' && image != null) {
+      response = await _dio.put('/users',
+          data: FormData.fromMap(
+            {
+              'email': email,
+              'image': await MultipartFile.fromFile(image!.path),
+            },
+          ));
+      // } else if (email == '' && image != null) {
+      //   response = await _dio.put('/users',
+      //       data: FormData.fromMap(
+      //         {
+      //           'image': await MultipartFile.fromFile(image.path),
+      //         },
+      //       ));
+      // } else if (email != '' && image == null) {
+      //   response = await _dio.put('/users',
+      //       data: FormData.fromMap(
+      //         {
+      //           'email': email,
+      //           'image': await MultipartFile.fromFile(image!.path),
+      //         },
+      //       ));
+      // }
 
       print(response.data['user']);
 
