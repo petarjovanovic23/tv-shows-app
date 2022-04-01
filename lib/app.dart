@@ -24,15 +24,14 @@ class TvShowsApp extends StatelessWidget {
   final StorageRepository? repository;
   AuthInfo? _authInfo;
 
-
   @override
   Widget build(BuildContext context) {
-
-
     return MultiProvider(
       providers: [
         Provider(create: (context) => StorageRepository()),
-        Provider(create: (context) => NetworkingRepository(context.read<StorageRepository>()))
+        Provider(
+            create: (context) =>
+                NetworkingRepository(context.read<StorageRepository>()))
       ],
       child: MaterialApp(
         theme: ThemeData.light().copyWith(
@@ -75,7 +74,7 @@ class TvShowsApp extends StatelessWidget {
           backgroundColor: Colors.white,
         ),
         debugShowCheckedModeBanner: false,
-        home: repository?.authInfo != null ? const ShowScreen() : const LoginScreen() ,
+        home: repository?.authInfo != null ? ShowScreen() : const LoginScreen(),
       ),
     );
   }

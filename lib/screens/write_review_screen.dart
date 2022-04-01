@@ -14,7 +14,8 @@ import '../widgets/buttons/submit_button_widget.dart';
 import '../widgets/input/review_input_field_widget.dart';
 
 class WriteReviewScreen extends StatefulWidget {
-  const WriteReviewScreen(this.show, {Key? key, required this.reviewProvider}) : super(key: key);
+  const WriteReviewScreen(this.show, {Key? key, required this.reviewProvider})
+      : super(key: key);
 
   final Show show;
   final ReviewProvider reviewProvider;
@@ -61,7 +62,8 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
               Navigator.of(context).pop();
             },
             failure: (exception) {
-              showDialog(context: context, builder: (context) => ErrorModal(context));
+              showDialog(
+                  context: context, builder: (context) => ErrorModal(context));
             },
           );
         },
@@ -96,12 +98,16 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
                       widget.show,
                       fixed: false,
                     ),
-                    ReviewInputFieldWidget(label: 'Comment', controller: textEditingController),
+                    ReviewInputFieldWidget(
+                        label: 'Comment', controller: textEditingController),
                     const SizedBox(height: 8.0),
-                    Consumer<WriteReviewProvider>(builder: (context, provider, _) {
+                    Consumer<WriteReviewProvider>(
+                        builder: (context, provider, _) {
                       return provider.state.maybeWhen(
-                        orElse: () => SubmitButtonWidget(widget.show, textEditingController, context),
-                        loading: () => Center(child: CircularProgressIndicator()),
+                        orElse: () => SubmitButtonWidget(
+                            widget.show, textEditingController, context),
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
                       );
                     }),
                   ],

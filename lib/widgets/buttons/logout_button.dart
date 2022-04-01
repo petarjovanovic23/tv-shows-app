@@ -31,10 +31,10 @@ class LogoutButton extends StatelessWidget {
                 }),
               ),
               onPressed: () {
-                context.read<StorageRepository>().delete();
+                context.read<StorageRepository>().deleteUser();
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
-                    builder: (context) => LoginScreen(),
+                    builder: (context) => const LoginScreen(),
                   ),
                   ModalRoute.withName('/'),
                 );

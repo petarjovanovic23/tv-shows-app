@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tv_shows/models/storage_repository.dart';
 import 'package:tv_shows/providers/request_provider.dart';
 
@@ -13,24 +14,66 @@ class UserProfileProvider extends RequestProvider<User> {
   late final NetworkingRepository _networkingRepository;
   late final StorageRepository _storageRepository;
   late String? _email;
+  late String? _image;
 
   get email => _email;
+
+  get image => _image;
 
   void fetchUserData() {
     _email = _storageRepository.authInfo!.uid;
   }
 
+  void updateUserPhoto(PickedFile image) {
+    executeRequest(
+        requestBuilder: () => _networkingRepository.uploadPhoto(image));
+  }
+
   void updateUserEmail(String newEmail) {
-    print('user email extis $email');
-    print('newemail $newEmail');
     if (email == newEmail ||
         newEmail == '' ||
         !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
             .hasMatch(newEmail)) {
-      print('return');
       return;
     }
     executeRequest(
         requestBuilder: () => _networkingRepository.updateUserEmail(newEmail));
+  }
+
+  void updateUserData(
+    PickedFile image, {
+    String? newEmail,
+  }) {
+    executeRequest(
+        requestBuilder: () =>
+            _networkingRepository.updateUserData(null, image));
+    //   if (newEmail != null && image == null) {
+    //     if (email != newEmail &&
+    //         newEmail != '' &&
+    //         RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+    //             .hasMatch(newEmail)) {
+    //       executeRequest(
+    //           requestBuilder: () =>
+    //               _networkingRepository.updateUserData(newEmail, null));
+    //     }
+    //   } else if (newEmail != null && image != null) {
+    //     if ((email != newEmail || newEmail != '') &&
+    //         RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+    //             .hasMatch(newEmail)) {
+    //       print('ovaj');
+    //       executeRequest(
+    //           requestBuilder: () =>
+    //               _networkingRepository.updateUserData(newEmail, image));
+    //     }
+    //   } else if (newEmail == null && image != null) {
+    //     print('odje ne?');
+    //     executeRequest(
+    //         requestBuilder: () =>
+    //             _networkingRepository.updateUserData(null, image));
+    //   } else {
+    //     executeRequest(
+    //         requestBuilder: () =>
+    //             _networkingRepository.updateUserData(newEmail, image));
+    //   }
   }
 }

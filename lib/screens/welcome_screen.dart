@@ -3,11 +3,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/gen/assets.gen.dart';
 import 'package:tv_shows/models/storage_repository.dart';
+import 'package:tv_shows/models/user.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/show_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  final String email;
+  final String? email;
   const WelcomeScreen(this.email, {Key? key}) : super(key: key);
 
   @override
@@ -23,12 +24,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       const Duration(seconds: 1),
       () => Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => Provider(
-            create: (context) => NetworkingRepository(
-              Provider.of<StorageRepository>(context, listen: false),
-            ),
-            child: const ShowScreen(),
-          ),
+          builder: (context) => ShowScreen(),
         ),
       ),
     );
@@ -43,7 +39,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           children: [
             SvgPicture.asset(Assets.images.welcomeIcon),
             const SizedBox(height: 24),
-            Text('Welcome, ${widget.email}!', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+            Text('Welcome, ${widget.email}!',
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
           ],
         ),
       ),

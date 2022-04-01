@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/providers/user_profile_provider.dart';
 
 class UpdateButton extends StatelessWidget {
-  const UpdateButton(this.email, {Key? key}) : super(key: key);
+  const UpdateButton(this.email, this.image, {Key? key}) : super(key: key);
   final String email;
+  final PickedFile? image;
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +25,37 @@ class UpdateButton extends StatelessWidget {
                 padding: MaterialStateProperty.all(
                     const EdgeInsets.symmetric(vertical: 16)),
                 backgroundColor: MaterialStateProperty.resolveWith((states) {
-                  // if (states.contains(MaterialState.disabled)) {
-                  //   return Colors.grey.withOpacity(0.5);
-                  // }
-
                   return Colors.white;
                 }),
               ),
               onPressed: () {
-                context.read<UserProfileProvider>().updateUserEmail(email);
+                // context.read<UserProfileProvider>().updateUserData(
+                //       image,
+                //       newEmail: email,
+                //     );
+                // context.read<UserProfileProvider>().updateUserEmail(email);
+                if (image != null) {
+                  context.read<UserProfileProvider>().updateUserPhoto(image!);
+                }
               },
               child: Text(
                 'Update',
                 style: TextStyle(color: Theme.of(context).primaryColor),
               ),
+              // Consumer<UserProfileProvider>(
+              //     builder: (context, provider, _) {
+              //   return provider.state.maybeWhen(
+              //     orElse: () => Text(
+              //       'Update',
+              //       style: TextStyle(color: Theme.of(context).primaryColor),
+              //     ),
+              //     loading: () => Center(
+              //       child: CircularProgressIndicator(
+              //         color: Theme.of(context).primaryColor,
+              //       ),
+              //     ),
+              //   );
+              // }),
             ),
           ),
         ),

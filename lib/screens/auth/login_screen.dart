@@ -14,8 +14,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void switchScreen() =>
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const RegisterScreen()));
+    void switchScreen() => Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const RegisterScreen()));
 
     return ChangeNotifierProvider(
       create: (_) => LoginProvider(),
@@ -25,10 +25,11 @@ class LoginScreen extends StatelessWidget {
             orElse: () {},
             success: (user) => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => WelcomeScreen(loginProvider.loginInfo.email as String),
+                builder: (context) => WelcomeScreen(user.email),
               ),
             ),
-            failure: (exception) => showDialog(context: context, builder: (context) => ErrorModal(context)),
+            failure: (exception) => showDialog(
+                context: context, builder: (context) => ErrorModal(context)),
           );
         },
         child: Builder(
@@ -39,7 +40,8 @@ class LoginScreen extends StatelessWidget {
               description: 'In order to continue please log in.',
               buttonTitle: 'Login',
               showOtherButtonTitle: 'Create account',
-              buttonPressed: () => loginProvider.loginUser(context.read<NetworkingRepository>()),
+              buttonPressed: () =>
+                  loginProvider.loginUser(context.read<NetworkingRepository>()),
               showOtherButtonPressed: switchScreen,
               loginProvider: loginProvider,
             );

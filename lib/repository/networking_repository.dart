@@ -1,4 +1,7 @@
+// import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tv_shows/models/auth_info.dart';
 import 'package:tv_shows/models/auth_info_interceptor.dart';
 import 'package:tv_shows/models/error_extractor_interceptor.dart';
@@ -122,11 +125,91 @@ class NetworkingRepository {
         'email': email,
       });
 
+      final info = AuthInfo.fromHeaderMap(response.headers.map);
+      _authInfoHolder.setInfo(info);
+
       print(response.data['user']);
 
       return User.fromJson(response.data['user']);
     } catch (exception) {
       print('Updating user email exception');
+      print(exception);
+      rethrow;
+    }
+  }
+
+  Future<User> updateUserData(String? email, PickedFile image) async {
+    try {
+      Map<String, dynamic> map = Map.from({
+        'image': await MultipartFile.fromFile(image.path),
+      });
+
+      var formData = FormData.fromMap(map);
+      final response = await _dio.put('/users', data: formData);
+
+      print('testing upload imges ${response.data['user']}');
+
+      return User.fromJson(response.data['user']);
+      // print('email odje $email');
+      // print('image odje $image');
+      // if (email == null && image == null) {
+      //   throw Exception('Error');
+      // }
+      //
+      // // if (email == null && image != null) {
+      // //   final formData = FormData.fromMap({
+      // //     'image': await MultipartFile.fromFile(image.path),
+      // //   });
+      // // } else if (image == null && email != null) {
+      // //   final formData = FormData.fromMap({
+      // //     'email': email,
+      // //   });
+      // // } else if (image != null && email != null) {
+      // //   print('odjeee');
+      // //   final formData = FormData.fromMap({
+      // //     'image': await MultipartFile.fromFile(image.path),
+      // //     'email': email,
+      // //   });
+      // // }
+      // final formData = FormData.fromMap({
+      //   // 'email': email,
+      //   'image': await MultipartFile.fromFile(image!.path),
+      // });
+      //
+      // final response = await _dio.put('/users', data: formData);
+      //
+      // print('responsujes li');
+      //
+      // final info = AuthInfo.fromHeaderMap(response.headers.map);
+      // _authInfoHolder.setInfo(info);
+      //
+      // print('testing update user data ${response.data['user']}');
+      //
+      // return User.fromJson(response.data['user']);
+    } catch (exception) {
+      print('Update user data exception');
+      print(exception);
+      rethrow;
+    }
+  }
+
+  Future<User> uploadPhoto(PickedFile image) async {
+    try {
+      print(_authInfoHolder.authInfo?.uid);
+
+      print('this is picked file object $image');
+      FormData formData = FormData.fromMap({
+        'image': await MultipartFile.fromFile(image.path),
+      });
+
+      print('test? ${formData.readAsBytes()}');
+      final response = await _dio.post('/users', data: formData);
+
+      print('testing upload imges ${response.data['user']}');
+
+      return User.fromJson(response.data['user']);
+    } catch (exception) {
+      print('Upload photo exception');
       print(exception);
       rethrow;
     }

@@ -13,6 +13,7 @@ class StorageRepository {
 
   AuthInfo? authInfo;
   final _userBox = Hive.openBox<User>('user_box');
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   Future<Iterable<User>> get results => _userBox.then((value) => value.values);
 
@@ -20,6 +21,11 @@ class StorageRepository {
     print('storing');
     final box = await _userBox;
     await box.add(user);
+  }
+
+  Future<User> getUser() async {
+    final box = await _userBox;
+    return box.values.first;
   }
 
   Future<void> delete() async {
@@ -30,7 +36,8 @@ class StorageRepository {
   void setInfo(AuthInfo info) async {
     authInfo = info;
     print('setting');
-    const FlutterSecureStorage storage = FlutterSecureStorage();
+
+    storage.deleteAll();
 
     final writeToken =
         await storage.write(key: 'accessToken', value: authInfo!.accessToken);
@@ -47,7 +54,7 @@ class StorageRepository {
       return authInfo;
     }
 
-    const FlutterSecureStorage storage = FlutterSecureStorage();
+    // const FlutterSecureStorage storage = FlutterSecureStorage();
 
     final accessToken = await storage.read(key: 'accessToken');
     final client = await storage.read(key: 'client');
@@ -70,7 +77,6 @@ class StorageRepository {
   }
 
   void deleteUser() {
-    const FlutterSecureStorage storage = FlutterSecureStorage();
     storage.deleteAll();
     delete();
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/models/storage_repository.dart';
+import 'package:tv_shows/providers/user_profile_provider.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/user_profile_screen.dart';
 import 'package:tv_shows/widgets/hidden_shows_widget.dart';
@@ -8,24 +9,37 @@ import 'package:tv_shows/widgets/show_screen_top_widget.dart';
 import 'package:tv_shows/widgets/shows_list_widget.dart';
 
 import '../gen/assets.gen.dart';
+import '../models/user.dart';
 import '../providers/show_screen_content_provider.dart';
 import '../providers/shows_provider.dart';
 
-class ShowScreen extends StatelessWidget {
+class ShowScreen extends StatefulWidget {
   const ShowScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    void showUserEditingModal() {
-      showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (context) {
-          return const UserProfileScreen();
-        },
-      );
-    }
+  State<ShowScreen> createState() => _ShowScreenState();
+}
 
+class _ShowScreenState extends State<ShowScreen> {
+  User? user;
+
+  void showUserEditingModal(BuildContext contextShowScreen) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: contextShowScreen,
+      builder: (contextUserProfile) {
+        return const UserProfileScreen();
+      },
+    );
+  }
+
+  void getUser(BuildContext context) async {
+    user = await context.read<StorageRepository>().getUser();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    getUser(context);
     return Scaffold(
       body: MultiProvider(
         providers: [
@@ -34,7 +48,7 @@ class ShowScreen extends StatelessWidget {
                 ShowsProvider(context.read<NetworkingRepository>()),
           ),
           ChangeNotifierProvider<ShowsScreenContentProvider>(
-            create: (_) => ShowsScreenContentProvider(),
+            create: (context) => ShowsScreenContentProvider(),
           ),
         ],
         child: LayoutBuilder(
@@ -44,7 +58,7 @@ class ShowScreen extends StatelessWidget {
               child: Column(
                 children: [
                   GestureDetector(
-                    onTap: showUserEditingModal,
+                    onTap: () => showUserEditingModal(context),
                     child: Align(
                       alignment: Alignment.bottomRight,
                       child: Container(
@@ -52,7 +66,9 @@ class ShowScreen extends StatelessWidget {
                         child: CircleAvatar(
                           maxRadius: 15,
                           backgroundColor: Colors.transparent,
-                          child: Assets.images.icProfilePlaceholderPng.image(),
+                          child: user?.imageUrl == null
+                              ? Assets.images.icProfilePlaceholderPng.image()
+                              : Image.network(user?.imageUrl as String),
                         ),
                       ),
                     ),
