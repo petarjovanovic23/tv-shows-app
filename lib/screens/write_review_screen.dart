@@ -14,8 +14,10 @@ import '../widgets/buttons/submit_button_widget.dart';
 import '../widgets/input/review_input_field_widget.dart';
 
 class WriteReviewScreen extends StatefulWidget {
-  const WriteReviewScreen(this.show, {Key? key}) : super(key: key);
+  const WriteReviewScreen(this.show, {Key? key, required this.reviewProvider}) : super(key: key);
+
   final Show show;
+  final ReviewProvider reviewProvider;
 
   @override
   State<WriteReviewScreen> createState() => _WriteReviewScreenState();
@@ -46,7 +48,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
         ChangeNotifierProvider(
           create: (context) => WriteReviewProvider(
             context.read<NetworkingRepository>(),
-            context.read<ReviewProvider>(),
+            widget.reviewProvider,
           ),
         ),
       ],
@@ -54,9 +56,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
         listener: (context, writeReviewProvider) {
           writeReviewProvider.state.maybeWhen(
             orElse: () => Container(),
-            loading: () => const Center(
-              child: CircularProgressIndicator(),
-            ),
+            loading: () {},
             success: (review) {
               Navigator.of(context).pop();
             },
@@ -98,8 +98,11 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
                     ),
                     ReviewInputFieldWidget(label: 'Comment', controller: textEditingController),
                     const SizedBox(height: 8.0),
-                    Builder(builder: (context) {
-                      return SubmitButtonWidget(widget.show, textEditingController, context);
+                    Consumer<WriteReviewProvider>(builder: (context, provider, _) {
+                      return provider.state.maybeWhen(
+                        orElse: () => SubmitButtonWidget(widget.show, textEditingController, context),
+                        loading: () => Center(child: CircularProgressIndicator()),
+                      );
                     }),
                   ],
                 ),
