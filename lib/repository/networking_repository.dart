@@ -66,7 +66,8 @@ class NetworkingRepository {
   Future<List<Show>> fetchShows() async {
     try {
       Response response = await _dio.get('/shows');
-      List<Map<String, dynamic>> listResponse = List<Map<String, dynamic>>.from(response.data['shows']);
+      List<Map<String, dynamic>> listResponse =
+          List<Map<String, dynamic>>.from(response.data['shows']);
 
       return listResponse.map((element) => Show.fromJson(element)).toList();
     } catch (exception) {
@@ -79,8 +80,8 @@ class NetworkingRepository {
   Future<List<Review>> fetchReviews(Show show) async {
     try {
       var response = await _dio.get('/shows/${show.id}/reviews');
-      var listResponse = List<Map<String, dynamic>>.from(response.data['reviews']);
-
+      var listResponse =
+          List<Map<String, dynamic>>.from(response.data['reviews']);
 
       print('potonji ${listResponse.first}');
       print('fetch reviews success');
@@ -110,6 +111,23 @@ class NetworkingRepository {
       print("This is the error addReview message");
       print(exception);
 
+      rethrow;
+    }
+  }
+
+  Future<User> updateUserEmail(String email) async {
+    try {
+      print('email $email');
+      var response = await _dio.put('/users', data: {
+        'email': email,
+      });
+
+      print(response.data['user']);
+
+      return User.fromJson(response.data['user']);
+    } catch (exception) {
+      print('Updating user email exception');
+      print(exception);
       rethrow;
     }
   }

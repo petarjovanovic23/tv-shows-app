@@ -8,6 +8,7 @@ class StorageRepository {
   static Future<void> initialize() async {
     await Hive.initFlutter();
     Hive.registerAdapter(UserAdapter());
+    StorageRepository().getAuthInfo;
   }
 
   AuthInfo? authInfo;
@@ -16,8 +17,14 @@ class StorageRepository {
   Future<Iterable<User>> get results => _userBox.then((value) => value.values);
 
   Future<void> store(User user) async {
+    print('storing');
     final box = await _userBox;
     await box.add(user);
+  }
+
+  Future<void> delete() async {
+    final box = await _userBox;
+    await box.clear();
   }
 
   void setInfo(AuthInfo info) async {
@@ -25,10 +32,13 @@ class StorageRepository {
     print('setting');
     const FlutterSecureStorage storage = FlutterSecureStorage();
 
-    final writeToken = await storage.write(key: 'accessToken', value: authInfo!.accessToken);
-    final writeClient = await storage.write(key: 'client', value: authInfo!.client);
+    final writeToken =
+        await storage.write(key: 'accessToken', value: authInfo!.accessToken);
+    final writeClient =
+        await storage.write(key: 'client', value: authInfo!.client);
 
-    final writeTokenType = await storage.write(key: 'tokenType', value: authInfo!.tokenType);
+    final writeTokenType =
+        await storage.write(key: 'tokenType', value: authInfo!.tokenType);
     final writeUid = await storage.write(key: 'uid', value: authInfo!.uid);
   }
 
@@ -45,10 +55,23 @@ class StorageRepository {
     final tokenType = await storage.read(key: 'tokenType');
     final uid = await storage.read(key: 'uid');
 
-    if (accessToken != null && client != null && tokenType != null && uid != null) {
-      authInfo = AuthInfo(accessToken: accessToken, client: client, tokenType: tokenType, uid: uid);
+    if (accessToken != null &&
+        client != null &&
+        tokenType != null &&
+        uid != null) {
+      authInfo = AuthInfo(
+          accessToken: accessToken,
+          client: client,
+          tokenType: tokenType,
+          uid: uid);
     }
 
     return authInfo;
+  }
+
+  void deleteUser() {
+    const FlutterSecureStorage storage = FlutterSecureStorage();
+    storage.deleteAll();
+    delete();
   }
 }

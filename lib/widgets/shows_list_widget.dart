@@ -15,7 +15,7 @@ class ShowsListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: SizedBox(
-        height: constraints.maxHeight * 0.8,
+        height: constraints.maxHeight * 0.76,
         child: RefreshIndicator(
           color: Theme.of(context).primaryColor,
           onRefresh: () => context.read<ShowsProvider>().pullToRefresh(context),

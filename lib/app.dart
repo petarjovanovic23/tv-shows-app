@@ -1,16 +1,34 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tv_shows/models/auth_info.dart';
 import 'package:tv_shows/models/storage_repository.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/auth/login_screen.dart';
+import 'package:tv_shows/screens/auth/register_screen.dart';
+import 'package:tv_shows/screens/show_screen.dart';
 
 import 'gen/fonts.gen.dart';
 
 class TvShowsApp extends StatelessWidget {
-  const TvShowsApp({Key? key}) : super(key: key);
+  TvShowsApp(this.repository) {
+    // getData();
+  }
+
+  // void getData() async {
+  //   await repository?.getAuthInfo;
+  //   _authInfo = repository?.authInfo;
+  // }
+
+  final StorageRepository? repository;
+  AuthInfo? _authInfo;
+
 
   @override
   Widget build(BuildContext context) {
+
+
     return MultiProvider(
       providers: [
         Provider(create: (context) => StorageRepository()),
@@ -57,7 +75,7 @@ class TvShowsApp extends StatelessWidget {
           backgroundColor: Colors.white,
         ),
         debugShowCheckedModeBanner: false,
-        home: const LoginScreen(),
+        home: repository?.authInfo != null ? const ShowScreen() : const LoginScreen() ,
       ),
     );
   }

@@ -14,10 +14,7 @@ class WriteReviewProvider extends RequestProvider<Review> {
   void addReview(Review review) {
     executeRequest(requestBuilder: () async {
       final rev = await _repository.addReview(review);
-      print('da li fetchas');
       reviewProvider.fetchReviews();
-      notifyListeners();
-      print('odje sad');
       return rev;
     });
   }
