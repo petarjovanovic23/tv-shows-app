@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tv_shows/models/user.dart';
@@ -12,20 +14,22 @@ class StorageRepository {
   }
 
   AuthInfo? authInfo;
-  final _userBox = Hive.openBox<User>('user_box');
+  final _userBox = Hive.openBox<String>('user_box');
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 
-  Future<Iterable<User>> get results => _userBox.then((value) => value.values);
-
-  Future<void> store(User user) async {
+  Future<void> store(Map<String, dynamic> json, String key) async {
     print('storing');
     final box = await _userBox;
-    await box.add(user);
+    await box.put(key, jsonEncode(json));
   }
 
-  Future<User> getUser() async {
+  Future<Map<String, dynamic>?> getUser(String key) async {
     final box = await _userBox;
-    return box.values.first;
+    final string = box.get(key);
+    if (string == null) {
+      return null;
+    }
+    return jsonDecode(string);
   }
 
   Future<void> delete() async {

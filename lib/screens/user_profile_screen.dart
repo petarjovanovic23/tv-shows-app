@@ -16,8 +16,8 @@ import '../widgets/buttons/update_button.dart';
 import '../widgets/input/input_field_widget.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({Key? key}) : super(key: key);
-
+  UserProfileScreen(this.user, {Key? key}) : super(key: key);
+  User user;
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
@@ -26,7 +26,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   late TextEditingController emailController;
   Image? _image;
   PickedFile? _imagePicked;
-  User? user;
 
   void updateButton() {
     setState(() {});
@@ -62,13 +61,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     });
   }
 
-  void getUser(BuildContext context) async {
-    user = await context.read<StorageRepository>().getUser();
-  }
-
   @override
   Widget build(BuildContext context) {
-    getUser(context);
+    print('screen ${widget.user.toJson()}');
     return ChangeNotifierProvider(
       create: (context) => UserProfileProvider(context.read(), context.read()),
       child: LayoutBuilder(builder: (context, constraints) {
@@ -79,7 +74,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             userProfileProvider.state.maybeWhen(
               orElse: () => Container(),
               success: (user) {
-                context.read<StorageRepository>().store(user);
+                context
+                    .read<StorageRepository>()
+                    .store(user.toJson(), user.id as String);
                 Navigator.of(context).pop();
               },
               failure: (exception) => showDialog(
@@ -96,11 +93,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   child: CircleAvatar(
                       maxRadius: 65,
                       backgroundColor: Colors.transparent,
-                      child:
-                          // user?.imageUrl != null
-                          //     ? Image.network(user?.imageUrl as String)
-                          //     :
-                          _image ??
+                      child: widget.user.imageUrl != null
+                          ? Image.network(widget.user.imageUrl as String)
+                          : _image ??
                               Assets.images.icProfilePlaceholderPng.image()),
                 ),
                 InputFieldWidget(

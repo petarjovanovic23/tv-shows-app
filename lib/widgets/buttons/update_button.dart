@@ -29,33 +29,25 @@ class UpdateButton extends StatelessWidget {
                 }),
               ),
               onPressed: () {
-                // context.read<UserProfileProvider>().updateUserData(
-                //       image,
-                //       newEmail: email,
-                //     );
-                // context.read<UserProfileProvider>().updateUserEmail(email);
-                if (image != null) {
-                  context.read<UserProfileProvider>().updateUserPhoto(image!);
-                }
+                context.read<UserProfileProvider>().updateUserData(
+                      newEmail: email,
+                      image: image,
+                    );
               },
-              child: Text(
-                'Update',
-                style: TextStyle(color: Theme.of(context).primaryColor),
-              ),
-              // Consumer<UserProfileProvider>(
-              //     builder: (context, provider, _) {
-              //   return provider.state.maybeWhen(
-              //     orElse: () => Text(
-              //       'Update',
-              //       style: TextStyle(color: Theme.of(context).primaryColor),
-              //     ),
-              //     loading: () => Center(
-              //       child: CircularProgressIndicator(
-              //         color: Theme.of(context).primaryColor,
-              //       ),
-              //     ),
-              //   );
-              // }),
+              child: Consumer<UserProfileProvider>(
+                  builder: (context, provider, _) {
+                return provider.state.maybeWhen(
+                  orElse: () => Text(
+                    'Update',
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
+                  loading: () => Center(
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                );
+              }),
             ),
           ),
         ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/models/storage_repository.dart';
@@ -14,32 +16,27 @@ import '../providers/show_screen_content_provider.dart';
 import '../providers/shows_provider.dart';
 
 class ShowScreen extends StatefulWidget {
-  const ShowScreen({Key? key}) : super(key: key);
-
+  ShowScreen({this.user, Key? key}) : super(key: key);
+  User? user;
   @override
   State<ShowScreen> createState() => _ShowScreenState();
 }
 
 class _ShowScreenState extends State<ShowScreen> {
-  User? user;
-
   void showUserEditingModal(BuildContext contextShowScreen) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: contextShowScreen,
       builder: (contextUserProfile) {
-        return const UserProfileScreen();
+        return UserProfileScreen(widget.user as User);
       },
     );
   }
 
-  void getUser(BuildContext context) async {
-    user = await context.read<StorageRepository>().getUser();
-  }
-
   @override
   Widget build(BuildContext context) {
-    getUser(context);
+    print('user img ${widget.user?.imageUrl}');
+    print(widget.user?.toJson());
     return Scaffold(
       body: MultiProvider(
         providers: [
@@ -66,9 +63,9 @@ class _ShowScreenState extends State<ShowScreen> {
                         child: CircleAvatar(
                           maxRadius: 15,
                           backgroundColor: Colors.transparent,
-                          child: user?.imageUrl == null
+                          child: widget.user?.imageUrl == null
                               ? Assets.images.icProfilePlaceholderPng.image()
-                              : Image.network(user?.imageUrl as String),
+                              : Image.network(widget.user?.imageUrl as String),
                         ),
                       ),
                     ),

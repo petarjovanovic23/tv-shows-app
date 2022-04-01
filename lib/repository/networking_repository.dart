@@ -36,7 +36,7 @@ class NetworkingRepository {
       final info = AuthInfo.fromHeaderMap(response.headers.map);
       _authInfoHolder.setInfo(info);
 
-      _authInfoHolder.store(User.fromJson(response.data['user']));
+      // _authInfoHolder.store(response.data['user'], response.data['user']['id']);
 
       print('This is the success register message');
       return User.fromJson(response.data['user']);
@@ -55,7 +55,8 @@ class NetworkingRepository {
       final info = AuthInfo.fromHeaderMap(response.headers.map);
       _authInfoHolder.setInfo(info);
 
-      _authInfoHolder.store(User.fromJson(response.data['user']));
+      _authInfoHolder.store(
+          response.data['user'], response.data['user']['email']);
 
       print('This is the success login message');
       return User.fromJson(response.data['user']);
@@ -138,16 +139,40 @@ class NetworkingRepository {
     }
   }
 
-  Future<User> updateUserData(String? email, PickedFile image) async {
+  Future<User> updateUserData(String? email, PickedFile? image) async {
     try {
-      Map<String, dynamic> map = Map.from({
-        'image': await MultipartFile.fromFile(image.path),
-      });
+      late Response response;
+      if (email != '' && image != null) {
+        response = await _dio.put('/users',
+            data: FormData.fromMap(
+              {
+                'email': email,
+                'image': await MultipartFile.fromFile(image.path),
+              },
+            ));
+      }
 
-      var formData = FormData.fromMap(map);
-      final response = await _dio.put('/users', data: formData);
+      if (email == '' && image != null) {
+        response = await _dio.put('/users',
+            data: FormData.fromMap(
+              {
+                'image': await MultipartFile.fromFile(image.path),
+              },
+            ));
+      } else if (email != '' && image == null) {
+        response = await _dio.put('/users',
+            data: FormData.fromMap(
+              {
+                'email': email,
+                'image': await MultipartFile.fromFile(image!.path),
+              },
+            ));
+      }
 
-      print('testing upload imges ${response.data['user']}');
+      print(response.data['user']);
+
+      final info = AuthInfo.fromHeaderMap(response.headers.map);
+      _authInfoHolder.setInfo(info);
 
       return User.fromJson(response.data['user']);
       // print('email odje $email');
@@ -176,16 +201,16 @@ class NetworkingRepository {
       //   'image': await MultipartFile.fromFile(image!.path),
       // });
       //
-      // final response = await _dio.put('/users', data: formData);
+      // final response = await _dio.put('/users', data: );
       //
       // print('responsujes li');
       //
-      // final info = AuthInfo.fromHeaderMap(response.headers.map);
-      // _authInfoHolder.setInfo(info);
+
       //
       // print('testing update user data ${response.data['user']}');
       //
       // return User.fromJson(response.data['user']);
+
     } catch (exception) {
       print('Update user data exception');
       print(exception);
@@ -195,17 +220,12 @@ class NetworkingRepository {
 
   Future<User> uploadPhoto(PickedFile image) async {
     try {
-      print(_authInfoHolder.authInfo?.uid);
-
-      print('this is picked file object $image');
-      FormData formData = FormData.fromMap({
-        'image': await MultipartFile.fromFile(image.path),
-      });
-
-      print('test? ${formData.readAsBytes()}');
-      final response = await _dio.post('/users', data: formData);
-
-      print('testing upload imges ${response.data['user']}');
+      final response = await _dio.put('/users',
+          data: FormData.fromMap(
+            {
+              'image': await MultipartFile.fromFile(image.path),
+            },
+          ));
 
       return User.fromJson(response.data['user']);
     } catch (exception) {
