@@ -10,7 +10,7 @@ class RegisterProvider extends RequestProvider<User> {
   }
 
   void registerUser(NetworkingRepository repository) {
-    executeRequest(requestBuilder: () => repository.registerUser(_registerInfo) as Future<User>);
+    executeRequest(requestBuilder: () => repository.registerUser(_registerInfo));
   }
 
   RegisterInfo get registerInfo => _registerInfo;

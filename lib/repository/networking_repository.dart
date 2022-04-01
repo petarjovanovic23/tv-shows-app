@@ -36,9 +36,7 @@ class NetworkingRepository {
       print('This is the success register message');
       return User.fromJson(response.data['user']);
     } catch (e) {
-      print('This is the error register message');
-      print(e);
-      return User.empty();
+      rethrow;
     }
   }
 
@@ -54,48 +52,59 @@ class NetworkingRepository {
 
       print('This is the success login message');
       return User.fromJson(response.data['user']);
-    } catch (e) {
+    } catch (error) {
       print('This is the error login message');
-
-      print(e);
-      return User.empty();
+      print(error);
+      rethrow;
     }
   }
 
-  Future<List<Show>> fetchShows(ShowsProvider showsProvider) async {
+  Future<List<Show>> fetchShows() async {
     try {
-      var response = await _dio.get('/shows');
-      var listResponse = response.data['shows'];
+      Response response = await _dio.get('/shows');
+      List<Map<String, dynamic>> listResponse = List<Map<String, dynamic>>.from(response.data['shows']);
 
-      listResponse.asMap().forEach((index, element) {
-        Show show = Show.fromJson(listResponse[index]);
-        showsProvider.addShow(show);
-      });
-
-      return showsProvider.getAllShows();
-    } catch (e) {
+      return listResponse.map((element) => Show.fromJson(element)).toList();
+    } catch (exception) {
       print('This is the error fetchShows message');
-      print(e);
-      return [];
+      print(exception);
+      rethrow;
     }
   }
 
-  Future<List<Review>> fetchReviews(Show show, ReviewProvider reviewProvider) async {
+  Future<List<Review>> fetchReviews(Show show) async {
     try {
-      reviewProvider.clear();
       var response = await _dio.get('/shows/${show.id}/reviews');
-      var listResponse = response.data['reviews'];
+      var listResponse = List<Map<String, dynamic>>.from(response.data['reviews']);
 
-      listResponse.asMap().forEach((index, element) {
-        Review review = Review.fromJson(listResponse[index]);
-        reviewProvider.addReview(review);
+      print('fetch reviews success');
+      return listResponse.map((element) => Review.fromJson(element)).toList();
+    } catch (exception) {
+      print('This is the error fetchReviews message');
+      print(exception);
+      rethrow;
+    }
+  }
+
+  Future<Review> addReview(Review review) async {
+    try {
+      if (review.comment == '') {
+        throw Exception('No comment');
+      }
+
+      var response = await _dio.post('/reviews', data: {
+        'comment': review.comment,
+        'rating': review.rating,
+        'show_id': review.showId,
       });
 
-      return reviewProvider.getAllReviews();
-    } catch (e) {
-      print('This is the error fetchReviews message');
-      print(e);
-      return [];
+      // print(response.data['review']);
+      return Review.fromJson(response.data['review']);
+    } catch (exception) {
+      print("This is the error addReview message");
+      print(exception);
+
+      rethrow;
     }
   }
 }

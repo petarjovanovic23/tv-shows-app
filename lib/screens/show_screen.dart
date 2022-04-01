@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tv_shows/models/show.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/widgets/hidden_shows_widget.dart';
 import 'package:tv_shows/widgets/show_screen_top_widget.dart';
 import 'package:tv_shows/widgets/shows_list_widget.dart';
+
+import '../providers/show_screen_content_provider.dart';
+import '../providers/shows_provider.dart';
 
 class ShowScreen extends StatelessWidget {
   const ShowScreen({Key? key}) : super(key: key);
@@ -15,7 +17,7 @@ class ShowScreen extends StatelessWidget {
       body: MultiProvider(
         providers: [
           ChangeNotifierProvider<ShowsProvider>(
-            create: (context) => ShowsProvider(Provider.of<NetworkingRepository>(context, listen: false)),
+            create: (context) => ShowsProvider(context.read<NetworkingRepository>()),
           ),
           ChangeNotifierProvider<ShowsScreenContentProvider>(
             create: (_) => ShowsScreenContentProvider(),
@@ -34,8 +36,8 @@ class ShowScreen extends StatelessWidget {
                       Expanded(child: Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor))),
                   success: (shows) => Provider.of<ShowsScreenContentProvider>(context).isHidden
                       ? HiddenShowsWidget(constraints)
-                      : ShowsListWidget(constraints),
-                  failure: (e) => const Expanded(
+                      : ShowsListWidget(constraints, shows),
+                  failure: (exception) => const Expanded(
                     child: Center(child: Text('Error retrieving shows. Please try again!')),
                   ),
                 ),
@@ -45,16 +47,5 @@ class ShowScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class ShowsScreenContentProvider extends ChangeNotifier {
-  bool _isHidden = false;
-
-  bool get isHidden => _isHidden;
-
-  void switchContent() {
-    _isHidden = !_isHidden;
-    notifyListeners();
   }
 }

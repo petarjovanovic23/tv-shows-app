@@ -7,18 +7,18 @@ class User {
   User.empty()
       : id = null,
         email = null,
-        image_url = null;
-  User(this.id, this.email, this.image_url);
+        imageUrl = null;
+  User(this.id, this.email, this.imageUrl);
 
   bool isEmpty() {
-    if (id == null && email == null && image_url == null) {
+    if (id == null && email == null && imageUrl == null) {
       return true;
     }
 
     return false;
   }
 
-  String? id, email, image_url;
+  String? id, email, imageUrl;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
