@@ -80,8 +80,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           listener: (context, userProfileProvider) {
             userProfileProvider.state.maybeWhen(
               orElse: () => Container(),
-              success: (user) {
-                context
+              success: (user) async {
+                await context
                     .read<StorageRepository>()
                     .store(user.toJson(), user.email as String);
                 Navigator.of(context).pop();
@@ -98,14 +98,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 GestureDetector(
                   onTap: openImagePicker,
                   child: CircleAvatar(
-                      maxRadius: 65,
-                      backgroundColor: Colors.transparent,
-                      child: _image ??
-                          Assets.images.icProfilePlaceholderPng.image()),
-                  // widget.user.imageUrl != null
-                  //     ? Image.network(widget.user.imageUrl as String)
-                  //     : _image ??
-                  //         Assets.images.icProfilePlaceholderPng.image()),
+                    maxRadius: 65,
+                    backgroundColor: Colors.transparent,
+                    child:
+                        _image ?? Assets.images.icProfilePlaceholderPng.image(),
+                  ),
                 ),
                 InputFieldWidget(
                   label: context.read<UserProfileProvider>().email,

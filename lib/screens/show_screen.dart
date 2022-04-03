@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/models/storage_repository.dart';
-import 'package:tv_shows/providers/user_profile_provider.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/user_profile_screen.dart';
 import 'package:tv_shows/widgets/hidden_shows_widget.dart';
@@ -38,9 +35,6 @@ class _ShowScreenState extends State<ShowScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.user?.toJson());
-    print('does rebuild?');
-
     StorageRepository repository = context.read<StorageRepository>();
     return Scaffold(
       body: MultiProvider(
@@ -59,7 +53,6 @@ class _ShowScreenState extends State<ShowScreen> {
             if (snapshot.hasData) {
               widget.user =
                   User.fromJson(snapshot.data as Map<String, dynamic>);
-              print('Show screen after future ${widget.user!.toJson()}');
               ShowsProvider showsProvider = Provider.of<ShowsProvider>(context);
               return LayoutBuilder(builder: (context, constraints) {
                 return SafeArea(

@@ -87,7 +87,6 @@ class NetworkingRepository {
       var listResponse =
           List<Map<String, dynamic>>.from(response.data['reviews']);
 
-      print('potonji ${listResponse.first}');
       print('fetch reviews success');
       return listResponse.map((element) => Review.fromJson(element)).toList();
     } catch (exception) {
@@ -109,7 +108,6 @@ class NetworkingRepository {
         'show_id': review.showId,
       });
 
-      // print(response.data['review']);
       return Review.fromJson(response.data['review']);
     } catch (exception) {
       print("This is the error addReview message");
@@ -119,27 +117,7 @@ class NetworkingRepository {
     }
   }
 
-  Future<User> updateUserEmail(String email) async {
-    try {
-      print('email $email');
-      var response = await _dio.put('/users', data: {
-        'email': email,
-      });
-
-      final info = AuthInfo.fromHeaderMap(response.headers.map);
-      _authInfoHolder.setInfo(info);
-
-      print(response.data['user']);
-
-      return User.fromJson(response.data['user']);
-    } catch (exception) {
-      print('Updating user email exception');
-      print(exception);
-      rethrow;
-    }
-  }
-
-  Future<User> updateUserData2(String? email, PickedFile? image) async {
+  Future<User> updateUserData(String? email, PickedFile? image) async {
     try {
       late Response response;
 
@@ -176,85 +154,6 @@ class NetworkingRepository {
       return User.fromJson(response.data['user']);
     } catch (exception) {
       print('update user 2 exception');
-      print(exception);
-      rethrow;
-    }
-  }
-
-  Future<User> updateUserData(String? email, PickedFile? image) async {
-    try {
-      String fileName = image!.path.split('/').last;
-      Response response = await _dio.put('/users',
-          data: FormData.fromMap(
-            {
-              'email': email,
-              'image':
-                  await MultipartFile.fromFile(image.path, filename: fileName),
-            },
-          ));
-      // if (email != '' && image != null) {
-      // response
-      // } else
-
-      final info = AuthInfo.fromHeaderMap(response.headers.map);
-      _authInfoHolder.setInfo(info);
-
-      return User.fromJson(response.data['user']);
-      // print('email odje $email');
-      // print('image odje $image');
-      // if (email == null && image == null) {
-      //   throw Exception('Error');
-      // }
-      //
-      // // if (email == null && image != null) {
-      // //   final formData = FormData.fromMap({
-      // //     'image': await MultipartFile.fromFile(image.path),
-      // //   });
-      // // } else if (image == null && email != null) {
-      // //   final formData = FormData.fromMap({
-      // //     'email': email,
-      // //   });
-      // // } else if (image != null && email != null) {
-      // //   print('odjeee');
-      // //   final formData = FormData.fromMap({
-      // //     'image': await MultipartFile.fromFile(image.path),
-      // //     'email': email,
-      // //   });
-      // // }
-      // final formData = FormData.fromMap({
-      //   // 'email': email,
-      //   'image': await MultipartFile.fromFile(image!.path),
-      // });
-      //
-      // final response = await _dio.put('/users', data: );
-      //
-      // print('responsujes li');
-      //
-
-      //
-      // print('testing update user data ${response.data['user']}');
-      //
-      // return User.fromJson(response.data['user']);
-
-    } catch (exception) {
-      print('Update user data exception');
-      print(exception);
-      rethrow;
-    }
-  }
-
-  Future<User> uploadPhoto(PickedFile image) async {
-    try {
-      final response = await _dio.put('/users',
-          data: FormData.fromMap(
-            {
-              'image': await MultipartFile.fromFile(image.path),
-            },
-          ));
-
-      return User.fromJson(response.data['user']);
-    } catch (exception) {
-      print('Upload photo exception');
       print(exception);
       rethrow;
     }

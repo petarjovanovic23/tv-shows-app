@@ -17,7 +17,6 @@ class TvShowsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('repo ${repository.authInfo}');
     return MultiProvider(
       providers: [
         Provider(create: (context) => StorageRepository()),
@@ -78,27 +77,3 @@ class TvShowsApp extends StatelessWidget {
     );
   }
 }
-
-/*
-* final string = await context
-                      .read<StorageRepository>()
-                      .getUser(context.read<StorageRepository>().authInfo?.uid
-                          as String);
-
-                  user = User.fromJson(string as Map<String, dynamic>);
-                  *
-return FutureBuilder<Map<String, dynamic>?>(
-                  future:
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-
-
-                    } else {
-                      return Center(
-                          child: CircularProgressIndicator(
-                        color: Theme.of(context).primaryColor,
-                      ));
-                    }
-                  },
-                );
-                  */

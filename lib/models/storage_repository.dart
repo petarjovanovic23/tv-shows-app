@@ -71,17 +71,13 @@ class StorageRepository {
         client != null &&
         tokenType != null &&
         uid != null) {
-      print('dodijeli li ?');
       setInfo(AuthInfo(
           accessToken: accessToken,
           client: client,
           tokenType: tokenType,
           uid: uid));
-
-      print('ifn ${authInfo!.uid}');
     }
 
-    print(' ovaj se vraca? ${authInfo?.uid}');
     return authInfo;
   }
 

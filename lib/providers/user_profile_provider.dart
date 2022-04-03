@@ -24,70 +24,12 @@ class UserProfileProvider extends RequestProvider<User> {
     _email = _storageRepository.authInfo!.uid;
   }
 
-  void updateUserPhoto(PickedFile image) {
-    executeRequest(
-        requestBuilder: () => _networkingRepository.uploadPhoto(image));
-  }
-
-  void updateUserEmail(String newEmail) {
-    if (email == newEmail ||
-        newEmail == '' ||
-        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-            .hasMatch(newEmail)) {
-      return;
-    }
-    executeRequest(
-        requestBuilder: () => _networkingRepository.updateUserEmail(newEmail));
-  }
-
   void updateUserData({required String newEmail, PickedFile? image}) {
     if (newEmail == '' && image == null) {
       return;
     }
     executeRequest(
         requestBuilder: () =>
-            _networkingRepository.updateUserData2(newEmail, image));
-
-    // if (newEmail != '' && image != null) {
-    //   if (email != newEmail &&
-    //       RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-    //           .hasMatch(newEmail)) {
-    //     executeRequest(
-    //         requestBuilder: () =>
-    //             _networkingRepository.updateUserData(newEmail, image));
-    //   } else {
-    //     executeRequest(
-    //         requestBuilder: () =>
-    //             _networkingRepository.updateUserData(null, image));
-    //   }
-    // } else if (newEmail == '' && image != null) {
-    //   executeRequest(
-    //       requestBuilder: () =>
-    //           _networkingRepository.updateUserData(null, image));
-    // }
-
-    // if (newEmail != null && image == null) {
-    //   if (email != newEmail &&
-    //       newEmail != '' &&
-    //       ) {
-    //   }
-    // } else if (newEmail != null && image != null) {
-    //   if ((email != newEmail || newEmail != '') &&
-    //       RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-    //           .hasMatch(newEmail)) {
-    //     print('ovaj');
-    //     executeRequest(
-    //         requestBuilder: () =>
-    //             _networkingRepository.updateUserData(newEmail, image));
-    //   }
-    // } else if (newEmail == null && image != null) {
-    //   executeRequest(
-    //       requestBuilder: () =>
-    //           _networkingRepository.updateUserData(null, image));
-    // } else {
-    //   executeRequest(
-    //       requestBuilder: () =>
-    //           _networkingRepository.updateUserData(newEmail, image));
-    // }
+            _networkingRepository.updateUserData(newEmail, image));
   }
 }
