@@ -1,37 +1,31 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/models/auth_info.dart';
 import 'package:tv_shows/models/storage_repository.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/auth/login_screen.dart';
-import 'package:tv_shows/screens/auth/register_screen.dart';
 import 'package:tv_shows/screens/show_screen.dart';
 
 import 'gen/fonts.gen.dart';
+import 'models/user.dart';
 
 class TvShowsApp extends StatelessWidget {
-  TvShowsApp(this.repository) {
-    // getData();
-  }
+  const TvShowsApp(this.repository, {Key? key}) : super(key: key);
+  // User? user;
 
-  // void getData() async {
-  //   await repository?.getAuthInfo;
-  //   _authInfo = repository?.authInfo;
-  // }
-
-  final StorageRepository? repository;
-  AuthInfo? _authInfo;
+  final StorageRepository repository;
 
   @override
   Widget build(BuildContext context) {
+    print('repo ${repository.authInfo}');
     return MultiProvider(
       providers: [
         Provider(create: (context) => StorageRepository()),
         Provider(
-            create: (context) =>
-                NetworkingRepository(context.read<StorageRepository>()))
+          create: (context) => NetworkingRepository(
+            context.read<StorageRepository>(),
+          ),
+        )
       ],
       child: MaterialApp(
         theme: ThemeData.light().copyWith(
@@ -74,8 +68,37 @@ class TvShowsApp extends StatelessWidget {
           backgroundColor: Colors.white,
         ),
         debugShowCheckedModeBanner: false,
-        home: repository?.authInfo != null ? ShowScreen() : const LoginScreen(),
+        home: repository.authInfo != null
+            ? Builder(builder: (context) {
+                context.read<StorageRepository>().setInfo(repository.authInfo!);
+                return ShowScreen();
+              })
+            : const LoginScreen(),
       ),
     );
   }
 }
+
+/*
+* final string = await context
+                      .read<StorageRepository>()
+                      .getUser(context.read<StorageRepository>().authInfo?.uid
+                          as String);
+
+                  user = User.fromJson(string as Map<String, dynamic>);
+                  *
+return FutureBuilder<Map<String, dynamic>?>(
+                  future:
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+
+
+                    } else {
+                      return Center(
+                          child: CircularProgressIndicator(
+                        color: Theme.of(context).primaryColor,
+                      ));
+                    }
+                  },
+                );
+                  */

@@ -12,7 +12,6 @@ class SliverListReviewsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final reviewProvider = context.watch<ReviewProvider>();
-    print('rebuild?');
     return reviewProvider.state.maybeWhen(
       orElse: () => Container(),
       loading: () => SliverToBoxAdapter(
@@ -24,8 +23,9 @@ class SliverListReviewsWidget extends StatelessWidget {
       ),
       success: (reviews) => SliverList(
         delegate: SliverChildBuilderDelegate(
-            (context, index) =>
-                Padding(padding: const EdgeInsets.symmetric(horizontal: 24.0), child: ReviewWidget(reviews[index])),
+            (context, index) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: ReviewWidget(reviews[index])),
             childCount: reviews.length),
       ),
       failure: (exception) => SliverToBoxAdapter(

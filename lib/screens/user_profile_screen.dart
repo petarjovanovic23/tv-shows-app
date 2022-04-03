@@ -35,6 +35,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   void initState() {
     super.initState();
 
+    _image = widget.user.imageUrl != null
+        ? Image.network(widget.user.imageUrl as String)
+        : null;
+
     emailController = TextEditingController();
     emailController.addListener(updateButton);
   }
@@ -77,7 +81,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             userProfileProvider.state.maybeWhen(
               orElse: () => Container(),
               success: (user) {
-                widget.user = user;
                 context
                     .read<StorageRepository>()
                     .store(user.toJson(), user.email as String);
@@ -97,10 +100,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   child: CircleAvatar(
                       maxRadius: 65,
                       backgroundColor: Colors.transparent,
-                      child: widget.user.imageUrl != null
-                          ? Image.network(widget.user.imageUrl as String)
-                          : _image ??
-                              Assets.images.icProfilePlaceholderPng.image()),
+                      child: _image ??
+                          Assets.images.icProfilePlaceholderPng.image()),
+                  // widget.user.imageUrl != null
+                  //     ? Image.network(widget.user.imageUrl as String)
+                  //     : _image ??
+                  //         Assets.images.icProfilePlaceholderPng.image()),
                 ),
                 InputFieldWidget(
                   label: context.read<UserProfileProvider>().email,

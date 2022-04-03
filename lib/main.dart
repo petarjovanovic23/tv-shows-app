@@ -5,6 +5,5 @@ import 'app.dart';
 
 void main() async {
   await StorageRepository.initialize();
-
   runApp(TvShowsApp(StorageRepository()));
 }

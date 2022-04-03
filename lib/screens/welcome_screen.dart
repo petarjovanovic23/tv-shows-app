@@ -18,16 +18,6 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   User? user;
 
-  void getUser() async {
-    final string =
-        await context.read<StorageRepository>().getUser(widget.email as String);
-
-    user = User.fromJson(string!);
-    print('inner');
-    print('user img ${user?.imageUrl}');
-    print(user?.toJson());
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -39,7 +29,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       User user = User.fromJson(string!);
       return Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => ShowScreen(user: user),
+          builder: (context) => ShowScreen(),
         ),
       );
     });

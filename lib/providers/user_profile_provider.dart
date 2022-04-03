@@ -46,7 +46,7 @@ class UserProfileProvider extends RequestProvider<User> {
     }
     executeRequest(
         requestBuilder: () =>
-            _networkingRepository.updateUserData(newEmail, image));
+            _networkingRepository.updateUserData2(newEmail, image));
 
     // if (newEmail != '' && image != null) {
     //   if (email != newEmail &&

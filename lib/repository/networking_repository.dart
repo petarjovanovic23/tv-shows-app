@@ -36,7 +36,7 @@ class NetworkingRepository {
       final info = AuthInfo.fromHeaderMap(response.headers.map);
       _authInfoHolder.setInfo(info);
 
-      // _authInfoHolder.store(response.data['user'], response.data['user']['id']);
+      _authInfoHolder.store(response.data['user'], response.data['user']['id']);
 
       print('This is the success register message');
       return User.fromJson(response.data['user']);
@@ -139,6 +139,48 @@ class NetworkingRepository {
     }
   }
 
+  Future<User> updateUserData2(String? email, PickedFile? image) async {
+    try {
+      late Response response;
+
+      if ((email == '' || email == _authInfoHolder.authInfo!.uid) &&
+          image != null) {
+        String fileName = image.path.split('/').last;
+        response = await _dio.put('/users',
+            data: FormData.fromMap(
+              {
+                'image': await MultipartFile.fromFile(image.path,
+                    filename: fileName),
+              },
+            ));
+      } else if (image == null) {
+        response = await _dio.put(
+          '/users',
+          data: {'email': email},
+        );
+      } else {
+        String fileName = image.path.split('/').last;
+        response = await _dio.put('/users',
+            data: FormData.fromMap(
+              {
+                'email': email,
+                'image': await MultipartFile.fromFile(image.path,
+                    filename: fileName),
+              },
+            ));
+      }
+
+      final info = AuthInfo.fromHeaderMap(response.headers.map);
+      _authInfoHolder.setInfo(info);
+
+      return User.fromJson(response.data['user']);
+    } catch (exception) {
+      print('update user 2 exception');
+      print(exception);
+      rethrow;
+    }
+  }
+
   Future<User> updateUserData(String? email, PickedFile? image) async {
     try {
       String fileName = image!.path.split('/').last;
@@ -152,22 +194,7 @@ class NetworkingRepository {
           ));
       // if (email != '' && image != null) {
       // response
-      // } else if (email == '' && image != null) {
-      //   response = await _dio.put('/users',
-      //       data: FormData.fromMap(
-      //         {
-      //           'image': await MultipartFile.fromFile(image.path),
-      //         },
-      //       ));
-      // } else if (email != '' && image == null) {
-      //   response = await _dio.put('/users',
-      //       data: FormData.fromMap(
-      //         {
-      //           'email': email,
-      //           'image': await MultipartFile.fromFile(image!.path),
-      //         },
-      //       ));
-      // }
+      // } else
 
       final info = AuthInfo.fromHeaderMap(response.headers.map);
       _authInfoHolder.setInfo(info);

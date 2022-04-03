@@ -10,7 +10,11 @@ class StorageRepository {
   static Future<void> initialize() async {
     await Hive.initFlutter();
     Hive.registerAdapter(UserAdapter());
-    StorageRepository().getAuthInfo;
+    // StorageRepository().authInfo = await StorageRepository().getAuthInfo;
+  }
+
+  StorageRepository() {
+    getAuthInfo;
   }
 
   AuthInfo? authInfo;
@@ -23,12 +27,13 @@ class StorageRepository {
   }
 
   Future<Map<String, dynamic>?> getUser(String key) async {
+    final authInfo = await getAuthInfo;
     final box = await _userBox;
     final string = box.get(key);
-    if (string == null) {
+    if (string == null && authInfo == null) {
       return null;
     }
-    return jsonDecode(string);
+    return jsonDecode(string as String);
   }
 
   Future<void> delete() async {
@@ -56,8 +61,6 @@ class StorageRepository {
       return authInfo;
     }
 
-    // const FlutterSecureStorage storage = FlutterSecureStorage();
-
     final accessToken = await storage.read(key: 'accessToken');
     final client = await storage.read(key: 'client');
 
@@ -68,13 +71,17 @@ class StorageRepository {
         client != null &&
         tokenType != null &&
         uid != null) {
-      authInfo = AuthInfo(
+      print('dodijeli li ?');
+      setInfo(AuthInfo(
           accessToken: accessToken,
           client: client,
           tokenType: tokenType,
-          uid: uid);
+          uid: uid));
+
+      print('ifn ${authInfo!.uid}');
     }
 
+    print(' ovaj se vraca? ${authInfo?.uid}');
     return authInfo;
   }
 
