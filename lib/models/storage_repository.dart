@@ -18,7 +18,6 @@ class StorageRepository {
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   Future<void> store(Map<String, dynamic> json, String key) async {
-    print('storing');
     final box = await _userBox;
     await box.put(key, jsonEncode(json));
   }
@@ -39,7 +38,6 @@ class StorageRepository {
 
   void setInfo(AuthInfo info) async {
     authInfo = info;
-    print('setting');
 
     storage.deleteAll();
 

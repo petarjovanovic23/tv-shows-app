@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user.g.dart';
 
 @HiveType(typeId: 1)
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class User {
   User.empty()
       : id = null,

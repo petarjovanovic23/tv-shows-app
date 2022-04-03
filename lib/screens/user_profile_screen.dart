@@ -49,21 +49,24 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   void openImagePicker() async {
     final picker = ImagePicker();
 
-    final imageFile = await picker.getImage(source: ImageSource.gallery);
+    final _pickedFile = await picker.getImage(
+        source: ImageSource.gallery,
+        imageQuality: 50,
+        maxHeight: 500,
+        maxWidth: 500);
 
-    if (imageFile == null) {
+    if (_pickedFile == null) {
       return;
     }
 
     setState(() {
-      _image = Image.file(File(imageFile.path));
-      _imagePicked = imageFile;
+      _image = Image.file(File(_pickedFile.path));
+      _imagePicked = _pickedFile;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print('screen ${widget.user.toJson()}');
     return ChangeNotifierProvider(
       create: (context) => UserProfileProvider(context.read(), context.read()),
       child: LayoutBuilder(builder: (context, constraints) {
@@ -74,6 +77,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             userProfileProvider.state.maybeWhen(
               orElse: () => Container(),
               success: (user) {
+                widget.user = user;
                 context
                     .read<StorageRepository>()
                     .store(user.toJson(), user.email as String);

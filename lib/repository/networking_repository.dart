@@ -141,15 +141,17 @@ class NetworkingRepository {
 
   Future<User> updateUserData(String? email, PickedFile? image) async {
     try {
-      Response response;
-      // if (email != '' && image != null) {
-      response = await _dio.put('/users',
+      String fileName = image!.path.split('/').last;
+      Response response = await _dio.put('/users',
           data: FormData.fromMap(
             {
               'email': email,
-              'image': await MultipartFile.fromFile(image!.path),
+              'image':
+                  await MultipartFile.fromFile(image.path, filename: fileName),
             },
           ));
+      // if (email != '' && image != null) {
+      // response
       // } else if (email == '' && image != null) {
       //   response = await _dio.put('/users',
       //       data: FormData.fromMap(
@@ -166,8 +168,6 @@ class NetworkingRepository {
       //         },
       //       ));
       // }
-
-      print(response.data['user']);
 
       final info = AuthInfo.fromHeaderMap(response.headers.map);
       _authInfoHolder.setInfo(info);
