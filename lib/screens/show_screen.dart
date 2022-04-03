@@ -13,11 +13,9 @@ import '../providers/show_screen_content_provider.dart';
 import '../providers/shows_provider.dart';
 
 class ShowScreen extends StatefulWidget {
-  // ShowScreen({this.user, Key? key}) : super(key: key);
-  // User? user;
-
   ShowScreen({Key? key}) : super(key: key);
   User? user;
+
   @override
   State<ShowScreen> createState() => _ShowScreenState();
 }
@@ -76,7 +74,6 @@ class _ShowScreenState extends State<ShowScreen> {
                           ),
                         ),
                       ),
-                      // const SizedBox(height: 44),
                       const ShowScreenTopWidget(),
                       showsProvider.state.maybeWhen(
                         orElse: () => Container(),

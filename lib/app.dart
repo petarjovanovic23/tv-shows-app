@@ -11,7 +11,6 @@ import 'models/user.dart';
 
 class TvShowsApp extends StatelessWidget {
   const TvShowsApp(this.repository, {Key? key}) : super(key: key);
-  // User? user;
 
   final StorageRepository repository;
 

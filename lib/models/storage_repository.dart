@@ -10,7 +10,6 @@ class StorageRepository {
   static Future<void> initialize() async {
     await Hive.initFlutter();
     Hive.registerAdapter(UserAdapter());
-    // StorageRepository().authInfo = await StorageRepository().getAuthInfo;
   }
 
   StorageRepository() {
