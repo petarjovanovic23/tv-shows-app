@@ -14,21 +14,28 @@ import '../providers/shows_provider.dart';
 
 class ShowScreen extends StatefulWidget {
   ShowScreen({Key? key}) : super(key: key);
-  User? user;
 
   @override
   State<ShowScreen> createState() => _ShowScreenState();
 }
 
 class _ShowScreenState extends State<ShowScreen> {
-  void showUserEditingModal(BuildContext contextShowScreen) {
-    showModalBottomSheet(
+  User? user;
+
+  void showUserEditingModal(BuildContext contextShowScreen) async {
+    final result = await showModalBottomSheet<User>(
       isScrollControlled: true,
       context: contextShowScreen,
       builder: (contextUserProfile) {
-        return UserProfileScreen(widget.user as User);
+        return UserProfileScreen(user as User);
       },
     );
+
+    if (result != null) {
+      setState(() {
+        user = result;
+      });
+    }
   }
 
   @override
@@ -49,8 +56,7 @@ class _ShowScreenState extends State<ShowScreen> {
           future: repository.getUser(repository.authInfo!.uid),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              widget.user =
-                  User.fromJson(snapshot.data as Map<String, dynamic>);
+              user = User.fromJson(snapshot.data as Map<String, dynamic>);
               ShowsProvider showsProvider = Provider.of<ShowsProvider>(context);
               return LayoutBuilder(builder: (context, constraints) {
                 return SafeArea(
@@ -65,11 +71,10 @@ class _ShowScreenState extends State<ShowScreen> {
                             child: CircleAvatar(
                               maxRadius: 15,
                               backgroundColor: Colors.transparent,
-                              child: widget.user?.imageUrl == null
+                              child: user?.imageUrl == null
                                   ? Assets.images.icProfilePlaceholderPng
                                       .image()
-                                  : Image.network(
-                                      widget.user?.imageUrl as String),
+                                  : Image.network(user?.imageUrl as String),
                             ),
                           ),
                         ),
