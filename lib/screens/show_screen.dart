@@ -11,6 +11,7 @@ import '../gen/assets.gen.dart';
 import '../models/user.dart';
 import '../providers/show_screen_content_provider.dart';
 import '../providers/shows_provider.dart';
+import 'auth/login_screen.dart';
 
 class ShowScreen extends StatefulWidget {
   ShowScreen({Key? key}) : super(key: key);
@@ -101,6 +102,8 @@ class _ShowScreenState extends State<ShowScreen> {
                   ),
                 );
               });
+            } else if (snapshot.hasError) {
+              return const LoginScreen();
             } else {
               return Center(
                 child: CircularProgressIndicator(
