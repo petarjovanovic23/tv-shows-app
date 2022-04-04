@@ -22,10 +22,19 @@ class UserProfileScreen extends StatefulWidget {
   State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
-class _UserProfileScreenState extends State<UserProfileScreen> {
+class _UserProfileScreenState extends State<UserProfileScreen>
+    with TickerProviderStateMixin {
   late TextEditingController emailController;
   Image? _image;
   PickedFile? _imagePicked;
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  late AnimationController _scalingController;
+  late Animation<double> _scalingAnimation;
+
+  bool updated = false;
 
   void updateButton() {
     setState(() {});
@@ -35,6 +44,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   void initState() {
     super.initState();
 
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+
+    _scalingController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+    _scalingAnimation = CurvedAnimation(
+        parent: _scalingController, curve: Curves.fastOutSlowIn);
     _image = widget.user.imageUrl != null
         ? Image.network(widget.user.imageUrl as String)
         : null;
@@ -46,7 +66,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   void dispose() {
     super.dispose();
-
+    _controller.dispose();
+    _scalingController.dispose();
     emailController.dispose();
   }
 
@@ -64,6 +85,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
 
     setState(() {
+      _controller.forward();
       _image = Image.file(File(_pickedFile.path));
       _imagePicked = _pickedFile;
     });
@@ -81,10 +103,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             userProfileProvider.state.maybeWhen(
               orElse: () => Container(),
               success: (user) async {
+                setState(() {
+                  updated = true;
+                  _scalingController.repeat(reverse: true);
+                });
                 await context
                     .read<StorageRepository>()
                     .store(user.toJson(), user.email as String);
-                Navigator.of(context).pop(user);
+                Future.delayed(const Duration(seconds: 2), () {
+                  Navigator.of(context).pop(user);
+                });
               },
               failure: (exception) => showDialog(
                   context: context, builder: (context) => ErrorModal(context)),
@@ -100,8 +128,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   child: CircleAvatar(
                     maxRadius: 65,
                     backgroundColor: Colors.transparent,
-                    child:
-                        _image ?? Assets.images.icProfilePlaceholderPng.image(),
+                    child: updated
+                        ? ScaleTransition(
+                            scale: _scalingAnimation, child: _image)
+                        : RotationTransition(
+                            turns: _animation,
+                            child: _image ??
+                                Assets.images.icProfilePlaceholderPng.image(),
+                          ),
                   ),
                 ),
                 InputFieldWidget(

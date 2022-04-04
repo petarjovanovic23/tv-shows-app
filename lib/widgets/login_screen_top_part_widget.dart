@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tv_shows/gen/assets.gen.dart';
@@ -19,19 +20,25 @@ class _AuthScreenTopPartWidgetState extends State<AuthScreenTopPartWidget>
     controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
-    );
+    )..repeat(reverse: true);
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final Animation<Offset> animation = Tween<Offset>(
+      begin: Offset.zero,
+      end: Offset.fromDirection(90 * pi / 180, 0.6),
+    ).animate(
+      CurvedAnimation(parent: controller, curve: Curves.linear),
+    );
+
     return Container(
       height: MediaQuery.of(context).size.height * 0.33,
       color: Theme.of(context).primaryColor,
@@ -44,7 +51,9 @@ class _AuthScreenTopPartWidgetState extends State<AuthScreenTopPartWidget>
               top: 0,
               right: 0),
           Positioned(
-              child: SvgPicture.asset(Assets.images.logoHorizontalWhite),
+              child: SlideTransition(
+                  position: animation,
+                  child: SvgPicture.asset(Assets.images.logoHorizontalWhite)),
               bottom: 80,
               left: 40),
           Positioned(

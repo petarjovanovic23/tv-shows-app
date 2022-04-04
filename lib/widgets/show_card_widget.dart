@@ -22,7 +22,8 @@ class ShowCardWidget extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => ChangeNotifierProvider(
-              create: (context) => ReviewProvider(context.read<NetworkingRepository>(), show),
+              create: (context) =>
+                  ReviewProvider(context.read<NetworkingRepository>(), show),
               child: ShowDetailsScreen(show),
             ),
           ),
@@ -36,14 +37,18 @@ class ShowCardWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Image.network(
-                  show.imageUrl as String,
-                  height: 182,
+              Hero(
+                tag: show.id as String,
+                child: Center(
+                  child: Image.network(
+                    show.imageUrl as String,
+                    height: 182,
+                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 12.0, horizontal: 16.0),
                 child: Text(
                   show.title ?? '',
                   style: theme.headline2,
