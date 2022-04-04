@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/models/storage_repository.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
+import 'package:tv_shows/screens/auth/login_screen.dart';
 import 'package:tv_shows/screens/user_profile_screen.dart';
 import 'package:tv_shows/widgets/hidden_shows_widget.dart';
 import 'package:tv_shows/widgets/show_screen_top_widget.dart';
@@ -101,6 +102,8 @@ class _ShowScreenState extends State<ShowScreen> {
                   ),
                 );
               });
+            } else if (snapshot.hasError) {
+              return const LoginScreen();
             } else {
               return Center(
                 child: CircularProgressIndicator(
