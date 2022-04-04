@@ -53,13 +53,72 @@ class _ShowScreenState extends State<ShowScreen> {
             create: (context) => ShowsScreenContentProvider(),
           ),
         ],
-        child: FutureBuilder(
-          future: repository.getUser(repository.authInfo!.uid),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              user = User.fromJson(snapshot.data as Map<String, dynamic>);
-              ShowsProvider showsProvider = Provider.of<ShowsProvider>(context);
-              return LayoutBuilder(builder: (context, constraints) {
+        child: user == null
+            ? FutureBuilder(
+                future: repository.getUser(repository.authInfo!.uid),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    user = User.fromJson(snapshot.data as Map<String, dynamic>);
+                    ShowsProvider showsProvider =
+                        Provider.of<ShowsProvider>(context);
+                    return LayoutBuilder(builder: (context, constraints) {
+                      return SafeArea(
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () => showUserEditingModal(context),
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Container(
+                                  margin: const EdgeInsets.only(right: 8.0),
+                                  child: CircleAvatar(
+                                    maxRadius: 15,
+                                    backgroundColor: Colors.transparent,
+                                    child: user?.imageUrl == null
+                                        ? Assets.images.icProfilePlaceholderPng
+                                            .image()
+                                        : Image.network(
+                                            user?.imageUrl as String),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const ShowScreenTopWidget(),
+                            showsProvider.state.maybeWhen(
+                              orElse: () => Container(),
+                              loading: () => Expanded(
+                                  child: Center(
+                                      child: CircularProgressIndicator(
+                                          color:
+                                              Theme.of(context).primaryColor))),
+                              success: (shows) =>
+                                  Provider.of<ShowsScreenContentProvider>(
+                                              context)
+                                          .isHidden
+                                      ? HiddenShowsWidget(constraints)
+                                      : ShowsListWidget(constraints, shows),
+                              failure: (exception) => const Expanded(
+                                child: Center(
+                                    child: Text(
+                                        'Error retrieving shows. Please try again!')),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    });
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    );
+                  }
+                },
+              )
+            : LayoutBuilder(builder: (context, constraints) {
+                ShowsProvider showsProvider =
+                    Provider.of<ShowsProvider>(context);
                 return SafeArea(
                   child: Column(
                     children: [
@@ -101,18 +160,7 @@ class _ShowScreenState extends State<ShowScreen> {
                     ],
                   ),
                 );
-              });
-            } else if (snapshot.hasError) {
-              return const LoginScreen();
-            } else {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).primaryColor,
-                ),
-              );
-            }
-          },
-        ),
+              }),
       ),
     );
   }
