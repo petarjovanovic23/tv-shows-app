@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tv_shows/models/storage_repository.dart';
 
 import 'app.dart';
 
-void main() {
-  runApp(const TvShowsApp());
+void main() async {
+  await StorageRepository.initialize();
+  runApp(TvShowsApp(StorageRepository()));
 }

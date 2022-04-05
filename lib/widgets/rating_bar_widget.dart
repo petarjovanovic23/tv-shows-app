@@ -3,6 +3,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/models/show.dart';
 
+import '../providers/rating_bar_provider.dart';
+
 class RatingBarWidget extends StatelessWidget {
   const RatingBarWidget(this.show, {this.fixed = true, Key? key}) : super(key: key);
   final Show show;
@@ -29,15 +31,4 @@ class RatingBarWidget extends StatelessWidget {
       },
     );
   }
-}
-
-class RatingBarProvider extends ChangeNotifier {
-  RatingBarProvider() : rating = 1;
-  int rating;
-
-  set setRating(int newRating) {
-    rating = newRating;
-  }
-
-  get getRating => rating;
 }

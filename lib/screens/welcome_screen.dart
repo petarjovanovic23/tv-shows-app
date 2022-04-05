@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:tv_shows/gen/assets.gen.dart';
-import 'package:tv_shows/models/auth_info_holder.dart';
+import 'package:tv_shows/models/storage_repository.dart';
+import 'package:tv_shows/models/user.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/show_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  final String email;
+  final String? email;
   const WelcomeScreen(this.email, {Key? key}) : super(key: key);
 
   @override
@@ -15,23 +16,23 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  User? user;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(
-      const Duration(seconds: 1),
-      () => Navigator.of(context).pushReplacement(
+    Future.delayed(const Duration(seconds: 1), () async {
+      final string = await context
+          .read<StorageRepository>()
+          .getUser(widget.email as String);
+      User user = User.fromJson(string!);
+      return Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => Provider(
-            create: (context) => NetworkingRepository(
-              Provider.of<AuthInfoHolder>(context, listen: false),
-            ),
-            child: const ShowScreen(),
-          ),
+          builder: (context) => ShowScreen(),
         ),
-      ),
-    );
+      );
+    });
   }
 
   @override
@@ -43,7 +44,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           children: [
             SvgPicture.asset(Assets.images.welcomeIcon),
             const SizedBox(height: 24),
-            Text('Welcome, ${widget.email}!', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+            Text('Welcome, ${widget.email}!',
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
           ],
         ),
       ),

@@ -7,7 +7,6 @@ class CurrentShowProvider extends ChangeNotifier {
 
   set currentShow(Show show) {
     _currentShow = show;
-    // notifyListeners();
   }
 
   Show get currentShow => _currentShow;

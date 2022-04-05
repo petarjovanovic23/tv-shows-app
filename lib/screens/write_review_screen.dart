@@ -7,14 +7,18 @@ import 'package:tv_shows/widgets/modals/error_modal.dart';
 import 'package:tv_shows/widgets/rating_bar_widget.dart';
 
 import '../models/show.dart';
+import '../providers/rating_bar_provider.dart';
 import '../providers/review_provider.dart';
 import '../providers/write_review_provider.dart';
 import '../widgets/buttons/submit_button_widget.dart';
 import '../widgets/input/review_input_field_widget.dart';
 
 class WriteReviewScreen extends StatefulWidget {
-  const WriteReviewScreen(this.show, {Key? key}) : super(key: key);
+  const WriteReviewScreen(this.show, {Key? key, required this.reviewProvider})
+      : super(key: key);
+
   final Show show;
+  final ReviewProvider reviewProvider;
 
   @override
   State<WriteReviewScreen> createState() => _WriteReviewScreenState();
@@ -45,7 +49,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
         ChangeNotifierProvider(
           create: (context) => WriteReviewProvider(
             context.read<NetworkingRepository>(),
-            context.read<ReviewProvider>(),
+            widget.reviewProvider,
           ),
         ),
       ],
@@ -53,15 +57,13 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
         listener: (context, writeReviewProvider) {
           writeReviewProvider.state.maybeWhen(
             orElse: () => Container(),
-            loading: () => const Center(
-              child: CircularProgressIndicator(),
-            ),
+            loading: () {},
             success: (review) {
-              writeReviewProvider.reviewProvider.fetchReviews(context.read<NetworkingRepository>(), widget.show);
               Navigator.of(context).pop();
             },
             failure: (exception) {
-              showDialog(context: context, builder: (context) => ErrorModal(context));
+              showDialog(
+                  context: context, builder: (context) => ErrorModal(context));
             },
           );
         },
@@ -96,10 +98,17 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
                       widget.show,
                       fixed: false,
                     ),
-                    ReviewInputFieldWidget(label: 'Comment', controller: textEditingController),
+                    ReviewInputFieldWidget(
+                        label: 'Comment', controller: textEditingController),
                     const SizedBox(height: 8.0),
-                    Builder(builder: (context) {
-                      return SubmitButtonWidget(widget.show, textEditingController, context);
+                    Consumer<WriteReviewProvider>(
+                        builder: (context, provider, _) {
+                      return provider.state.maybeWhen(
+                        orElse: () => SubmitButtonWidget(
+                            widget.show, textEditingController, context),
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                      );
                     }),
                   ],
                 ),
@@ -111,45 +120,3 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
     );
   }
 }
-
-/*
-* LayoutBuilder(builder: (context, constraints) {
-          ThemeData theme = Theme.of(context);
-
-          return SingleChildScrollView(
-            child: Container(
-              height: constraints.maxHeight * 0.55,
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Write a review',
-                        style: theme.textTheme.headline3,
-                      ),
-                      GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () => Navigator.of(context).pop(),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8.0),
-                  RatingBarWidget(
-                    widget.show,
-                    fixed: false,
-                  ),
-                  ReviewInputFieldWidget(label: 'Comment', controller: textEditingController),
-                  const SizedBox(height: 8.0),
-                  Builder(builder: (context) {
-                    return SubmitButtonWidget(widget.show, textEditingController, context);
-                  }),
-                ],
-              ),
-            ),
-          );
-        }),*/

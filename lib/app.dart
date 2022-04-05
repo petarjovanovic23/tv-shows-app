@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tv_shows/models/auth_info_holder.dart';
+import 'package:tv_shows/models/auth_info.dart';
+import 'package:tv_shows/models/storage_repository.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/auth/login_screen.dart';
+import 'package:tv_shows/screens/show_screen.dart';
 
 import 'gen/fonts.gen.dart';
+import 'models/user.dart';
 
 class TvShowsApp extends StatelessWidget {
-  const TvShowsApp({Key? key}) : super(key: key);
+  const TvShowsApp(this.repository, {Key? key}) : super(key: key);
+
+  final StorageRepository repository;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (context) => AuthInfoHolder()),
-        Provider(create: (context) => NetworkingRepository(context.read<AuthInfoHolder>()))
+        Provider(create: (context) => StorageRepository()),
+        Provider(
+          create: (context) => NetworkingRepository(
+            context.read<StorageRepository>(),
+          ),
+        )
       ],
       child: MaterialApp(
         theme: ThemeData.light().copyWith(
@@ -57,7 +66,12 @@ class TvShowsApp extends StatelessWidget {
           backgroundColor: Colors.white,
         ),
         debugShowCheckedModeBanner: false,
-        home: const LoginScreen(),
+        home: repository.authInfo != null
+            ? Builder(builder: (context) {
+                context.read<StorageRepository>().setInfo(repository.authInfo!);
+                return ShowScreen();
+              })
+            : const LoginScreen(),
       ),
     );
   }

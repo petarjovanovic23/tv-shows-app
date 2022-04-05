@@ -1,8 +1,10 @@
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';
 
-@JsonSerializable()
+@HiveType(typeId: 1)
+@JsonSerializable(fieldRename: FieldRename.snake)
 class User {
   User.empty()
       : id = null,
@@ -18,7 +20,14 @@ class User {
     return false;
   }
 
-  String? id, email, imageUrl;
+  @HiveField(0)
+  String? id;
+
+  @HiveField(1)
+  String? email;
+
+  @HiveField(2)
+  String? imageUrl;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

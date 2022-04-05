@@ -1,12 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tv_shows/models/auth_info.dart';
-import 'package:tv_shows/models/auth_info_holder.dart';
 import 'package:tv_shows/models/auth_info_interceptor.dart';
 import 'package:tv_shows/models/error_extractor_interceptor.dart';
 import 'package:tv_shows/models/register_info.dart';
 import 'package:tv_shows/models/review.dart';
 import 'package:tv_shows/models/show.dart';
 import 'package:tv_shows/models/sign_in_info.dart';
+import 'package:tv_shows/models/storage_repository.dart';
 import 'package:tv_shows/models/user.dart';
 
 class NetworkingRepository {
@@ -21,7 +22,7 @@ class NetworkingRepository {
   }
 
   late final Dio _dio;
-  final AuthInfoHolder _authInfoHolder;
+  final StorageRepository _authInfoHolder;
 
   Future<User> registerUser(RegisterInfo registerInfo) async {
     try {
@@ -32,6 +33,8 @@ class NetworkingRepository {
 
       final info = AuthInfo.fromHeaderMap(response.headers.map);
       _authInfoHolder.setInfo(info);
+
+      _authInfoHolder.store(response.data['user'], response.data['user']['id']);
 
       print('This is the success register message');
       return User.fromJson(response.data['user']);
@@ -50,6 +53,9 @@ class NetworkingRepository {
       final info = AuthInfo.fromHeaderMap(response.headers.map);
       _authInfoHolder.setInfo(info);
 
+      _authInfoHolder.store(
+          response.data['user'], response.data['user']['email']);
+
       print('This is the success login message');
       return User.fromJson(response.data['user']);
     } catch (error) {
@@ -62,7 +68,8 @@ class NetworkingRepository {
   Future<List<Show>> fetchShows() async {
     try {
       Response response = await _dio.get('/shows');
-      List<Map<String, dynamic>> listResponse = List<Map<String, dynamic>>.from(response.data['shows']);
+      List<Map<String, dynamic>> listResponse =
+          List<Map<String, dynamic>>.from(response.data['shows']);
 
       return listResponse.map((element) => Show.fromJson(element)).toList();
     } catch (exception) {
@@ -75,7 +82,8 @@ class NetworkingRepository {
   Future<List<Review>> fetchReviews(Show show) async {
     try {
       var response = await _dio.get('/shows/${show.id}/reviews');
-      var listResponse = List<Map<String, dynamic>>.from(response.data['reviews']);
+      var listResponse =
+          List<Map<String, dynamic>>.from(response.data['reviews']);
 
       print('fetch reviews success');
       return listResponse.map((element) => Review.fromJson(element)).toList();
@@ -98,12 +106,53 @@ class NetworkingRepository {
         'show_id': review.showId,
       });
 
-      // print(response.data['review']);
       return Review.fromJson(response.data['review']);
     } catch (exception) {
       print("This is the error addReview message");
       print(exception);
 
+      rethrow;
+    }
+  }
+
+  Future<User> updateUserData(String? email, PickedFile? image) async {
+    try {
+      late Response response;
+
+      if ((email == '' || email == _authInfoHolder.authInfo!.uid) &&
+          image != null) {
+        String fileName = image.path.split('/').last;
+        response = await _dio.put('/users',
+            data: FormData.fromMap(
+              {
+                'image': await MultipartFile.fromFile(image.path,
+                    filename: fileName),
+              },
+            ));
+      } else if (image == null) {
+        response = await _dio.put(
+          '/users',
+          data: {'email': email},
+        );
+      } else {
+        String fileName = image.path.split('/').last;
+        response = await _dio.put('/users',
+            data: FormData.fromMap(
+              {
+                'email': email,
+                'image': await MultipartFile.fromFile(image.path,
+                    filename: fileName),
+              },
+            ));
+      }
+
+      final info = AuthInfo.fromHeaderMap(response.headers.map);
+      _authInfoHolder.setInfo(info);
+
+      return User.fromJson(response.data['user']);
+    } catch (exception) {
+      print('update user 2 exception');
+      print(exception);
       rethrow;
     }
   }
