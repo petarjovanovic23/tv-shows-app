@@ -6,7 +6,7 @@ import '../../widgets/input/login_form_widget.dart';
 import '../../widgets/input/register_form_widget.dart';
 import '../../widgets/login_screen_top_part_widget.dart';
 
-class BaseLoginScreen extends StatelessWidget {
+class BaseLoginScreen extends StatefulWidget {
   const BaseLoginScreen({
     Key? key,
     required this.title,
@@ -24,24 +24,29 @@ class BaseLoginScreen extends StatelessWidget {
   final RegisterProvider? registerProvider;
   final LoginProvider? loginProvider;
 
+  @override
+  State<BaseLoginScreen> createState() => _BaseLoginScreenState();
+}
+
+class _BaseLoginScreenState extends State<BaseLoginScreen> {
   Widget formWidget() {
-    if (registerProvider != null) {
+    if (widget.registerProvider != null) {
       return RegisterFormWidget(
-        title: title,
-        description: description,
-        buttonTitle: buttonTitle,
-        showOtherButtonTitle: showOtherButtonTitle,
-        buttonPressed: buttonPressed,
-        showOtherButtonPressed: showOtherButtonPressed,
+        title: widget.title,
+        description: widget.description,
+        buttonTitle: widget.buttonTitle,
+        showOtherButtonTitle: widget.showOtherButtonTitle,
+        buttonPressed: widget.buttonPressed,
+        showOtherButtonPressed: widget.showOtherButtonPressed,
       );
     }
     return LoginFormWidget(
-      title: title,
-      description: description,
-      buttonTitle: buttonTitle,
-      showOtherButtonTitle: showOtherButtonTitle,
-      buttonPressed: buttonPressed,
-      showOtherButtonPressed: showOtherButtonPressed,
+      title: widget.title,
+      description: widget.description,
+      buttonTitle: widget.buttonTitle,
+      showOtherButtonTitle: widget.showOtherButtonTitle,
+      buttonPressed: widget.buttonPressed,
+      showOtherButtonPressed: widget.showOtherButtonPressed,
     );
   }
 
