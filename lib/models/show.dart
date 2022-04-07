@@ -20,8 +20,6 @@ class Show {
     required this.imageUrl,
   });
 
-  static List<Show> allShows = [];
-
   factory Show.fromJson(Map<String, dynamic> json) => _$ShowFromJson(json);
 
   Map<String, dynamic> toJson() => _$ShowToJson(this);

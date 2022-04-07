@@ -6,12 +6,11 @@ import '../models/show.dart';
 import '../repository/networking_repository.dart';
 
 class ShowsProvider extends RequestProvider<List<Show>> {
-  ShowsProvider(NetworkingRepository repository) {
-    _repository = repository;
-    fetchShows(repository);
+  ShowsProvider(this._repository) {
+    fetchShows(_repository);
   }
 
-  late NetworkingRepository _repository;
+  final NetworkingRepository _repository;
 
   void fetchShows(NetworkingRepository repository) {
     executeRequest(requestBuilder: () => repository.fetchShows());

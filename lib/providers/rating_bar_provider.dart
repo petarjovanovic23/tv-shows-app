@@ -8,6 +8,4 @@ class RatingBarProvider extends ChangeNotifier {
     rating = newRating;
     notifyListeners();
   }
-
-  get getRating => rating;
 }

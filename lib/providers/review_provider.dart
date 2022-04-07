@@ -5,7 +5,7 @@ import '../models/review.dart';
 import '../models/show.dart';
 import '../repository/networking_repository.dart';
 
-class ReviewProvider extends RequestProvider<List<Review>>  {
+class ReviewProvider extends RequestProvider<List<Review>> {
   ReviewProvider(this._repository, this._show) {
     fetchReviews();
   }
@@ -14,12 +14,6 @@ class ReviewProvider extends RequestProvider<List<Review>>  {
   final Show _show;
 
   void fetchReviews() {
-    executeRequest(requestBuilder: ()  async {
-
-      final rev = _repository.fetchReviews(_show);
-      notifyListeners();
-      return rev;
-    });
+    executeRequest(requestBuilder: () => _repository.fetchReviews(_show));
   }
-
 }
