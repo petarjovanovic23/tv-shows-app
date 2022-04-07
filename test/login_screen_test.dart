@@ -24,7 +24,5 @@ void main() {
     final findButton = find.byType(BaseButtonWidget);
 
     expect(findButton, findsOneWidget);
-
-    await tester.pump();
   });
 }
