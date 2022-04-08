@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tv_shows/gen/assets.gen.dart';
 import 'package:tv_shows/providers/review_provider.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/show_details_screen.dart';
@@ -41,12 +42,16 @@ class ShowCardWidget extends StatelessWidget {
               Hero(
                 tag: show.id as String,
                 child: Center(
-                  child: Image.network(
-                    show.imageUrl as String,
-                    height: 182,
-                    headers:
-                        context.read<StorageRepository>().authInfo!.toHeaders(),
-                  ),
+                  child: show.imageUrl != null
+                      ? Image.network(
+                          show.imageUrl as String,
+                          height: 182,
+                          headers: context
+                              .read<StorageRepository>()
+                              .authInfo!
+                              .toHeaders(),
+                        )
+                      : Assets.images.icOffice.image(height: 180),
                 ),
               ),
               Padding(
