@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tv_shows/models/auth_info.dart';
 import 'package:tv_shows/models/storage_repository.dart';
 import 'package:tv_shows/repository/networking_repository.dart';
 import 'package:tv_shows/screens/auth/login_screen.dart';
 import 'package:tv_shows/screens/show_screen.dart';
 
 import 'gen/fonts.gen.dart';
-import 'models/user.dart';
 
 class TvShowsApp extends StatelessWidget {
   const TvShowsApp(this.repository, {Key? key}) : super(key: key);
