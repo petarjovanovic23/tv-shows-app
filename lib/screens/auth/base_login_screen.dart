@@ -4,7 +4,7 @@ import 'package:tv_shows/providers/register_provider.dart';
 
 import '../../widgets/input/login_form_widget.dart';
 import '../../widgets/input/register_form_widget.dart';
-import '../../widgets/login_screen_top_part_widget.dart';
+import '../../widgets/auth_screen_top_part_widget.dart';
 
 class BaseLoginScreen extends StatefulWidget {
   const BaseLoginScreen({
